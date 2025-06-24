@@ -6,6 +6,11 @@ import fs from 'fs';
 import cors from "cors";
 import { registerRoutes } from "./routes";
 import { connectMongo } from "./db/mongo";
+import { fileURLToPath } from 'url';
+
+// ESM-compatible __filename and __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Simple logger function
 function log(message: string, source = "express") {
@@ -39,7 +44,7 @@ app.use(cors({
     } else {
       callback(new Error('Not allowed by CORS'));
     }
-  },
+  },  
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

@@ -1,12 +1,13 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { UserModel } from '../models/User';
 import { authenticateToken } from '../middleware/auth';
 import jwt from 'jsonwebtoken';
+import { AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
 // Register new user
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password, name, username } = req.body;
 
@@ -54,7 +55,7 @@ router.post('/register', async (req, res) => {
 });
 
 // Login user
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -104,7 +105,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Get current user
-router.get('/me', authenticateToken, async (req: any, res) => {
+router.get('/me', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     res.json({
       user: {
@@ -123,7 +124,7 @@ router.get('/me', authenticateToken, async (req: any, res) => {
 });
 
 // Update user profile (email, name, profile photo)
-router.patch('/profile', authenticateToken, async (req: any, res) => {
+router.patch('/profile', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { email, name, profilePhoto } = req.body;
     const userId = req.user._id;
@@ -167,7 +168,7 @@ router.patch('/profile', authenticateToken, async (req: any, res) => {
 });
 
 // Change password
-router.patch('/change-password', authenticateToken, async (req: any, res) => {
+router.patch('/change-password', authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user._id;
@@ -204,7 +205,7 @@ router.patch('/change-password', authenticateToken, async (req: any, res) => {
 });
 
 // Firebase auth integration
-router.post('/firebase', async (req, res) => {
+router.post('/firebase', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { firebaseUid, email, name, username } = req.body;
 

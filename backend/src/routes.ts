@@ -1,4 +1,4 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage as storageMem, storageMongoose } from "./storage";
@@ -16,6 +16,11 @@ import { z } from "zod";
 import authRoutes from "./routes/auth";
 import indexRoutes from "./routes/index";
 import { authenticateToken } from "./middleware/auth";
+
+// Add this interface for authenticated requests
+interface AuthRequest extends Request {
+  user?: any;
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -97,7 +102,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/indexes", indexRoutes);
 
   // Generate index from natural language prompt (protected route)
-  app.post("/api/generate-index", authenticateToken, async (req: any, res) => {
+  app.post("/api/generate-index", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     const storageMemOnly = storageMem;
     try {
@@ -217,7 +222,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get index by ID with stocks (protected - user can only access their own indexes)
-  app.get("/api/index/:id", authenticateToken, async (req: any, res) => {
+  app.get("/api/index/:id", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const id = req.params.id;
@@ -249,7 +254,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all indexes for the authenticated user (protected)
-  app.get("/api/indexes", authenticateToken, async (req: any, res) => {
+  app.get("/api/indexes", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const userId = req.user._id.toString();
@@ -268,7 +273,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get trending/public indexes (public route - no authentication required)
-  app.get("/api/trending-indexes", async (req, res) => {
+  app.get("/api/trending-indexes", async (req: Request, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       // Get only public indexes using the dedicated method
@@ -334,7 +339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update index (protected - user can only update their own indexes)
-  app.patch("/api/index/:id", authenticateToken, async (req: any, res) => {
+  app.patch("/api/index/:id", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const id = req.params.id;
@@ -375,7 +380,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Toggle index public/private status (protected - user can only update their own indexes)
-  app.patch("/api/index/:id/toggle-public", authenticateToken, async (req: any, res) => {
+  app.patch("/api/index/:id/toggle-public", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const id = req.params.id;
@@ -420,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get portfolio summary for authenticated user (protected)
-  app.get("/api/portfolio", authenticateToken, async (req: any, res) => {
+  app.get("/api/portfolio", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const userId = req.user._id.toString();
@@ -454,7 +459,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Universal search endpoint for stocks, indices, crypto, ETFs, etc.
-  app.get("/api/search", async (req, res) => {
+  app.get("/api/search", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { query } = req.query;
       
@@ -592,7 +597,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Additional endpoint to get current stock price (for the custom stocks feature)
-app.get("/api/stock-price/:symbol", async (req, res) => {
+app.get("/api/stock-price/:symbol", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const symbol = req.params.symbol.toUpperCase();
     
@@ -662,7 +667,7 @@ app.get("/api/stock-price/:symbol", async (req, res) => {
 });
 
   // Get backtesting data for an index (protected - user can only access their own indexes)
-  app.get("/api/index/:id/backtest", authenticateToken, async (req: any, res) => {
+  app.get("/api/index/:id/backtest", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const id = req.params.id;
@@ -726,7 +731,7 @@ app.get("/api/stock-price/:symbol", async (req, res) => {
   });
 
   // Get trending/public indexes with enhanced metrics (public route)
-  app.get("/api/explore", async (req, res) => {
+  app.get("/api/explore", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const storage = storageMongoose;
       const publicIndexes = await storage.getTrendingIndexes();
@@ -753,7 +758,7 @@ app.get("/api/stock-price/:symbol", async (req, res) => {
   });
 
   // Napkin AI integration endpoint (protected - user can only access their own indexes)
-  app.post("/api/napkin", authenticateToken, async (req: any, res) => {
+  app.post("/api/napkin", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
     try {
       const { indexId } = req.body;
       const userId = req.user._id.toString();
@@ -820,7 +825,7 @@ app.get("/api/stock-price/:symbol", async (req, res) => {
   });
 
   // Get market data for major indices
-  app.get('/api/market-data', async (req, res) => {
+  app.get('/api/market-data', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const storage = storageMongoose;
       const benchmarkData = await getBenchmarkData();
@@ -877,7 +882,7 @@ app.get("/api/stock-price/:symbol", async (req, res) => {
   });
 
   // Get global statistics (public route - no authentication required)
-  app.get("/api/stats", async (req, res) => {
+  app.get("/api/stats", async (req: Request, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     try {
       const stats = await storage.getGlobalStats();
