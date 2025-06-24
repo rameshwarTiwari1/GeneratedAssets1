@@ -8,7 +8,8 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { Stock } from '@shared/schema';
+import { Stock } from '@/shared/schema';
+import { Key } from 'react';
 
 interface StockTableProps {
   stocks: Stock[];

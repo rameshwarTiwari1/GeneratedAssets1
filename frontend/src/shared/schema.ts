@@ -71,6 +71,7 @@ export interface InsertIndex {
 
 // Stock interface
 export interface Stock {
+  id?: string;
   _id?: ObjectId;
   indexId: string | ObjectId;
   symbol: string;
