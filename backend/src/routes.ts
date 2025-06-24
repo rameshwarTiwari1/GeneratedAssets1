@@ -205,7 +205,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       res.json(result);
-    } catch (error) {
+    }
+    // Add duplicate key error handling
+    catch (error) {
+      if (error && error.code === 11000) {
+        return res.status(400).json({ message: "An index with this name already exists. Please choose a different name." });
+      }
       console.error("Generate index error:", error);
       res.status(500).json({ message: error instanceof Error ? error.message : "Failed to generate index" });
     }

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StockTable } from '@/components/StockTable';
 import { PerformanceChart } from '@/components/PerformanceChart';
+import type { Stock } from '@/shared/schema';
 import { 
   ArrowLeft, 
   Share, 
@@ -19,18 +20,6 @@ import {
 } from 'lucide-react';
 import { Link } from 'wouter';
 import { authService } from '@/lib/auth';
-
-interface Stock {
-  id: string;
-  symbol: string;
-  name: string;
-  weight: number;
-  price: number;
-  change1d?: number;
-  changePercent1d?: number;
-  marketCap?: number;
-  sector?: string;
-}
 
 interface IndexData {
   _id: string;
@@ -267,16 +256,6 @@ export default function IndexDetail() {
           <div className="lg:col-span-2">
             <PerformanceChart 
               indexId={indexData._id}
-              data={{
-                portfolio: indexData.performance1y || indexData.performance1d || 0,
-                sp500: indexData.benchmarkSp500 ? (indexData.benchmarkSp500 / 500 - 1) * 100 : 8.9,
-                nasdaq: indexData.benchmarkNasdaq ? (indexData.benchmarkNasdaq / 400 - 1) * 100 : 10.2,
-                alpha: (indexData.performance1y || indexData.performance1d || 0) - 8.9,
-                beta: 1.2,
-                sharpeRatio: 0.85,
-                maxDrawdown: 18.5,
-                volatility: 22.3,
-              }}
             />
           </div>
 

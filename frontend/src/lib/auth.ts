@@ -18,6 +18,11 @@ export interface AuthUser {
   name: string;
   profilePhoto?: string;
   token: string;
+  bio?: string;
+  location?: string;
+  website?: string;
+  timezone?: string;
+  currency?: string;
 }
 
 class AuthService {

@@ -128,7 +128,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
             </div>
           )}
           <div ref={chatEndRef} />
-        </div>
+                </div>
         {quickSuggestions.length > 0 && (
           <div className="flex flex-wrap gap-2 px-4 pb-2">
             {quickSuggestions.map((s, i) => (
@@ -136,8 +136,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
                 {s}
               </Button>
             ))}
-          </div>
-        )}
+                </div>
+              )}
         <form onSubmit={handleSend} className="flex gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900">
           <Input
             value={input}
