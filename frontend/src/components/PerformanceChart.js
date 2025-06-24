@@ -42,7 +42,7 @@ export function PerformanceChart({ indexId }) {
     const { data: backtestData, isLoading, error } = useQuery({
         queryKey: ['backtest', indexId, timeRange],
         queryFn: async () => {
-            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/indexes/backtest/${indexId}?period=${timeRange}`);
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/indexes/backtest/${indexId}?period=${timeRange}`);
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Failed to fetch backtest data');
@@ -67,7 +67,7 @@ export function PerformanceChart({ indexId }) {
             if (!token) {
                 throw new Error('Authentication required');
             }
-            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/napkin`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/napkin`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -41,7 +41,7 @@ export function IndexCard({ index, variant = 'recent', onClick, currentUserId, o
             return;
         setLoading(true);
         try {
-            const response = await authService.apiRequest(`http://localhost:5000/api/index/${index._id}/toggle-public`, {
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/index/${index._id}/toggle-public`, {
                 method: 'PATCH',
             });
             if (!response.ok) {

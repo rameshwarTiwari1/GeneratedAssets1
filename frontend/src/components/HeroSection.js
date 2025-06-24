@@ -21,7 +21,7 @@ export function HeroSection({ onCreateIndex }) {
     const { data: stats, isLoading: statsLoading } = useQuery({
         queryKey: ['globalStats'],
         queryFn: async () => {
-            const response = await fetch('http://localhost:5000/api/stats');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/stats`);
             if (!response.ok) {
                 throw new Error('Failed to fetch statistics');
             }
@@ -32,7 +32,7 @@ export function HeroSection({ onCreateIndex }) {
     const generateMutation = useMutation({
         mutationFn: async (prompt) => {
             try {
-                const response = await authService.apiRequest('http://localhost:5000/api/generate-index', {
+                const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/generate-index`, {
                     method: 'POST',
                     body: JSON.stringify({ prompt }),
                 });

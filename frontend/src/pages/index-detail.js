@@ -15,7 +15,7 @@ export default function IndexDetail() {
     const { data: indexData, isLoading, error } = useQuery({
         queryKey: ['index', indexId],
         queryFn: async () => {
-            const response = await authService.apiRequest(`http://localhost:5000/api/index/${indexId}`);
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/index/${indexId}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch index');
             }

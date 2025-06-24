@@ -43,7 +43,7 @@ export default function MyIndexesPage() {
     const { data: indexes = [], isLoading: indexesLoading } = useQuery({
         queryKey: ["indexes"],
         queryFn: async () => {
-            const response = await authService.apiRequest("http://localhost:5000/api/indexes");
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/indexes`);
             if (!response.ok) {
                 throw new Error("Failed to fetch indexes");
             }

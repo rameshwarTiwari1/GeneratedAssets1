@@ -19,7 +19,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }) {
     const chatEndRef = useRef(null);
     const createIndexMutation = useMutation({
         mutationFn: async (data) => {
-            const response = await authService.apiRequest('http://localhost:5000/api/generate-index', {
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/generate-index`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

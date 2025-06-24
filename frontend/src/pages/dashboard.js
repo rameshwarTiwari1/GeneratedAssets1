@@ -84,7 +84,7 @@ export default function Dashboard() {
     const { data: indexes = [], isLoading: indexesLoading } = useQuery({
         queryKey: ["indexes"],
         queryFn: async () => {
-            const response = await authService.apiRequest("http://localhost:5000/api/indexes");
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/indexes`);
             if (!response.ok) {
                 throw new Error("Failed to fetch indexes");
             }
@@ -95,7 +95,7 @@ export default function Dashboard() {
     const { data: trendingIndexes = [], isLoading: trendingLoading } = useQuery({
         queryKey: ["trending-indexes"],
         queryFn: async () => {
-            const response = await fetch("http://localhost:5000/api/trending-indexes");
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/trending-indexes`);
             if (!response.ok) {
                 throw new Error("Failed to fetch trending indexes");
             }
@@ -106,7 +106,7 @@ export default function Dashboard() {
     const { data: portfolio } = useQuery({
         queryKey: ["portfolio"],
         queryFn: async () => {
-            const response = await authService.apiRequest("http://localhost:5000/api/portfolio");
+            const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/portfolio`);
             if (!response.ok) {
                 throw new Error("Failed to fetch portfolio");
             }
@@ -117,7 +117,7 @@ export default function Dashboard() {
     const { data: marketData } = useQuery({
         queryKey: ["market-data"],
         queryFn: async () => {
-            const response = await fetch("http://localhost:5000/api/market-data");
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/market-data`);
             if (!response.ok) {
                 throw new Error("Failed to fetch market data");
             }
@@ -168,7 +168,7 @@ export default function Dashboard() {
         }
         setIsSearching(true);
         try {
-            const response = await fetch(`http://localhost:5000/api/search?query=${encodeURIComponent(query)}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/search?query=${encodeURIComponent(query)}`);
             if (response.ok) {
                 const data = await response.json();
                 setSearchResults(data.results || []);
@@ -222,7 +222,7 @@ export default function Dashboard() {
                 setSearchResults([]);
                 return;
             }
-            const response = await fetch(`http://localhost:5000/api/stock-price/${stock.symbol}`);
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/stock-price/${stock.symbol}`);
             const priceData = await response.json();
             const newStock = {
                 symbol: stock.symbol,
