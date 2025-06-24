@@ -471,7 +471,7 @@ export default function Dashboard() {
               </div>
               <nav className="hidden md:flex space-x-6">
                 <Link
-                  href="/"
+                  href="/dashboard"
                   className="text-gray-900 dark:text-gray-100 font-medium border-b-2 border-blue-600 dark:border-blue-400 pb-4 transition-colors"
                 >
                   Dashboard

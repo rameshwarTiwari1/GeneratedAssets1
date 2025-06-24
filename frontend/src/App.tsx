@@ -5,6 +5,7 @@ import NotFound from "./pages/not-found";
 import Profile from "./pages/profile";
 import IndexDetail from "./pages/index-detail";
 import HomePage from "./pages/home";
+import MyIndexesPage from "./pages/myindexes";
 // import MyIndexes from "./pages/myindexes";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Route path="/" component={HomePage} />
       <Route path="/auth" component={Auth} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/indexes" component={MyIndexesPage} />
       {/* <Route path="/myindexes" component={MyIndexes} /> */}
       <Route path="/profile" component={Profile} />
       <Route path="/index/:id" component={IndexDetail} />

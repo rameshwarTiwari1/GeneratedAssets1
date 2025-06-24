@@ -14,6 +14,8 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
+  LineChart,
+  Line,
 } from 'recharts';
 
 interface PerformanceChartProps {
@@ -46,6 +48,29 @@ const timeRanges = [
   { label: '5Y', value: '5Y' },
   { label: '10Y', value: '10Y' },
 ];
+
+// Smoothing and downsampling helpers
+interface ChartDatum {
+  [key: string]: any;
+  asset: number;
+  date: string;
+}
+
+function movingAverage(data: ChartDatum[], windowSize: number = 7): ChartDatum[] {
+  if (!Array.isArray(data) || data.length === 0) return [];
+  const result: ChartDatum[] = [];
+  for (let i = 0; i < data.length; i++) {
+    const start = Math.max(0, i - windowSize + 1);
+    const window = data.slice(start, i + 1);
+    const avg = window.reduce((sum, d) => sum + (d.asset ?? 0), 0) / window.length;
+    result.push({ ...data[i], asset: avg });
+  }
+  return result;
+}
+
+function downsample(data: ChartDatum[], step: number = 3): ChartDatum[] {
+  return data.filter((_, idx) => idx % step === 0);
+}
 
 export function PerformanceChart({ indexId }: PerformanceChartProps) {
   const [selectedPeriod, setSelectedPeriod] = useState('1M');
@@ -209,36 +234,38 @@ export function PerformanceChart({ indexId }: PerformanceChartProps) {
             </div>
             <div className="h-96">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={backtestData.chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                  <defs>
-                    <linearGradient id="colorAsset" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
-                    </linearGradient>
-                     <linearGradient id="colorBenchmark" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="#60a5fa" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <XAxis 
-                    dataKey="date" 
-                    stroke="#9ca3af"
-                    tick={{ fill: '#6b7280' }}
-                    tickLine={{ stroke: '#4b5563' }}
-                    axisLine={{ stroke: '#4b5563' }}
-                  />
-                  <YAxis 
-                    stroke="#9ca3af" 
-                    tickFormatter={(value) => `${value}%`}
-                    tick={{ fill: '#6b7280' }}
-                    tickLine={{ stroke: '#4b5563' }}
-                    axisLine={{ stroke: '#4b5563' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#a78bfa', strokeDasharray: '3 3' }}/>
-                  <Legend />
-                  <Area type="monotone" dataKey="asset" name="Asset" stroke="#8b5cf6" fill="url(#colorAsset)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="benchmark" name="S&P 500" stroke="#60a5fa" fill="url(#colorBenchmark)" strokeWidth={2} />
-                </AreaChart>
+                {(() => {
+                  const smoothedData = movingAverage(backtestData.chartData, 7);
+                  const displayData = downsample(smoothedData, 3);
+                  return (
+                    <LineChart data={displayData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                      <XAxis 
+                        dataKey="date" 
+                        stroke="#9ca3af"
+                        tick={{ fill: '#6b7280' }}
+                        tickLine={{ stroke: '#4b5563' }}
+                        axisLine={{ stroke: '#4b5563' }}
+                      />
+                      <YAxis 
+                        stroke="#9ca3af" 
+                        tickFormatter={(value) => `${value}%`}
+                        tick={{ fill: '#6b7280' }}
+                        tickLine={{ stroke: '#4b5563' }}
+                        axisLine={{ stroke: '#4b5563' }}
+                      />
+                      <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#a259ff', strokeDasharray: '3 3' }}/>
+                      <Line
+                        type="monotone"
+                        dataKey="asset"
+                        name="Asset"
+                        stroke="#a259ff"
+                        strokeWidth={2}
+                        dot={false}
+                        activeDot={false}
+                      />
+                    </LineChart>
+                  );
+                })()}
               </ResponsiveContainer>
             </div>
           </>
