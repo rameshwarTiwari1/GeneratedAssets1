@@ -207,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(result);
     }
     // Add duplicate key error handling
-    catch (error) {
+    catch (error: any) {
       if (error && error.code === 11000) {
         return res.status(400).json({ message: "An index with this name already exists. Please choose a different name." });
       }

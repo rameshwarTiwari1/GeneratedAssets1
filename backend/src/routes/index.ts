@@ -18,7 +18,7 @@ router.get('/backtest/:indexId', authenticateToken, async (req, res) => {
     }
 
     // This is mock data generation. In a real scenario, you'd fetch actual historical data.
-    const backtestData = generateBacktestingData(index.stocks as any, index.name);
+    const backtestData = generateBacktestingData(index.stocks as any, index.name || "");
     
     const detailedBacktest = getDetailedBacktest(backtestData.historical, period as any);
 

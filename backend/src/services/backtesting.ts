@@ -89,7 +89,29 @@ export function generateBacktestingData(stocks: StockData[], indexName: string):
     };
   }
   
-  return { historical, performance };
+  // Ensure all keys are present with defaults if missing
+  const emptyResult: BacktestResult = {
+    period: '',
+    portfolioReturn: 0,
+    sp500Return: 0,
+    nasdaqReturn: 0,
+    alpha: 0,
+    beta: 0,
+    sharpeRatio: 0,
+    maxDrawdown: 0,
+    volatility: 0,
+  };
+
+  return {
+    historical,
+    performance: {
+      '1M': performance['1M'] || { ...emptyResult, period: '1M' },
+      '3M': performance['3M'] || { ...emptyResult, period: '3M' },
+      '6M': performance['6M'] || { ...emptyResult, period: '6M' },
+      '1Y': performance['1Y'] || { ...emptyResult, period: '1Y' },
+      '3Y': performance['3Y'] || { ...emptyResult, period: '3Y' },
+    }
+  };
 }
 
 function calculatePortfolioGrowth(stocks: StockData[], daysSinceStart: number, indexName: string): number {
