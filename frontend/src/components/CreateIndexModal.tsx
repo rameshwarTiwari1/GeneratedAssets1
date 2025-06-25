@@ -29,13 +29,19 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
 
   const createIndexMutation = useMutation({
     mutationFn: async (data: { prompt: string }) => {
-      const response = await authService.apiRequest('http://localhost:5000/api/generate-index', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt: data.prompt, description: `AI-generated index based on: ${data.prompt}` }),
-      });
+      const response = await authService.apiRequest(
+        "https://generatedassets1.onrender.com/api/generate-index",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            prompt: data.prompt,
+            description: `AI-generated index based on: ${data.prompt}`,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error('Failed to create index');
       }

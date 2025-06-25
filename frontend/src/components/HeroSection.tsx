@@ -30,7 +30,9 @@ export function HeroSection({ onCreateIndex }: HeroSectionProps) {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['globalStats'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:5000/api/stats');
+      const response = await fetch(
+        "https://generatedassets1.onrender.com/api/stats"
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch statistics');
       }
@@ -42,10 +44,13 @@ export function HeroSection({ onCreateIndex }: HeroSectionProps) {
   const generateMutation = useMutation({
     mutationFn: async (prompt: string) => {
       try {
-        const response = await authService.apiRequest('http://localhost:5000/api/generate-index', {
-          method: 'POST',
-          body: JSON.stringify({ prompt }),
-        });
+        const response = await authService.apiRequest(
+          "https://generatedassets1.onrender.com/api/generate-index",
+          {
+            method: "POST",
+            body: JSON.stringify({ prompt }),
+          }
+        );
         
         if (!response.ok) {
           const error = await response.text();

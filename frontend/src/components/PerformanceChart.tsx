@@ -91,7 +91,7 @@ export function PerformanceChart({ indexId }: PerformanceChartProps) {
     queryKey: ['backtest', indexId, timeRange],
     queryFn: async () => {
       const response = await authService.apiRequest(
-        `${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/indexes/backtest/${indexId}?period=${timeRange}`
+        `${import.meta.env.VITE_API_URL || 'https://generatedassets1.onrender.com/api'}/indexes/backtest/${indexId}?period=${timeRange}`
       );
       if (!response.ok) {
         const errorData = await response.json();
@@ -121,7 +121,7 @@ export function PerformanceChart({ indexId }: PerformanceChartProps) {
         throw new Error('Authentication required');
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000/api'}/napkin`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'https://generatedassets1.onrender.com/api'}/napkin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
