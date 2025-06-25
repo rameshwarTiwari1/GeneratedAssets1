@@ -85,9 +85,12 @@ export function IndexCard({ index, variant = 'recent', onClick, currentUserId, o
     if (!index._id) return;
     setLoading(true);
     try {
-      const response = await authService.apiRequest(`http://localhost:5000/api/index/${index._id}/toggle-public`, {
-        method: 'PATCH',
-      });
+      const response = await authService.apiRequest(
+        `https://generatedassets1.onrender.com/api/index/${index._id}/toggle-public`,
+        {
+          method: "PATCH",
+        }
+      );
       
       if (!response.ok) {
         const errorText = await response.text();
