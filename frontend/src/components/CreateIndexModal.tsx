@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { Send } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/lib/auth';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
 
 interface CreateIndexModalProps {
   isOpen: boolean;
@@ -26,9 +27,13 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const [, setLocation] = useLocation();
+
+  console.log("CreateIndexModal component loaded");
 
   const createIndexMutation = useMutation({
     mutationFn: async (data: { prompt: string }) => {
+      console.log("mutationFn called with", data);
       const response = await authService.apiRequest(
         "https://generatedassets1.onrender.com/api/generate-index",
         {
@@ -48,6 +53,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
       return response.json();
     },
     onSuccess: (data, variables) => {
+      console.log("Index creation response:", data);
       setMessages((prev) => [
         ...prev,
         { sender: 'ai', text: `✅ Index "${data.name}" created with ${data.stocks?.length || 0} stocks.\n${data.description || ''}` }
@@ -57,8 +63,16 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
         description: `"${data.name}" has been generated with ${data.stocks?.length || 0} stocks.`,
       });
       queryClient.invalidateQueries({ queryKey: ['indexes'] });
+      onClose();
+      if (data._id) {
+        console.log("Redirecting to: ", `/index/${data._id}`);
+        setTimeout(() => {
+          setLocation(`/index/${data._id}`);
+        }, 100);
+      }
     },
     onError: (error: any) => {
+      console.log("Index creation error:", error);
       setMessages((prev) => [
         ...prev,
         { sender: 'ai', text: error.message || 'Failed to create index. Please try again.' }
@@ -95,6 +109,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   }, [messages, isLoading]);
 
   const handleClose = () => {
+    console.log("handleClose called");
     if (isOpen) {
       setInput('');
       setMessages([]);
@@ -103,6 +118,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   };
 
   const handleSend = (e: React.FormEvent) => {
+    console.log("handleSend called");
     e.preventDefault();
     if (!input.trim()) return;
     setMessages((prev) => [...prev, { sender: 'user', text: input.trim() }]);
@@ -116,9 +132,11 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent className="max-w-md flex flex-col h-[70vh] p-0 bg-gray-50 dark:bg-gray-900 border-none shadow-xl">
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <DialogTitle className="sr-only">Create Index</DialogTitle>
+        <span className="sr-only" id="create-index-desc">Create a new AI-generated index by describing your investment idea.</span>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4" aria-describedby="create-index-desc">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`}>
@@ -134,7 +152,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
             </div>
           )}
           <div ref={chatEndRef} />
-                </div>
+        </div>
         {quickSuggestions.length > 0 && (
           <div className="flex flex-wrap gap-2 px-4 pb-2">
             {quickSuggestions.map((s, i) => (
@@ -142,8 +160,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
                 {s}
               </Button>
             ))}
-                </div>
-              )}
+          </div>
+        )}
         <form onSubmit={handleSend} className="flex gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900">
           <Input
             value={input}

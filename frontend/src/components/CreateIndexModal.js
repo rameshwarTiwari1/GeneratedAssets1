@@ -7,6 +7,7 @@ import { Send } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/lib/auth';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
 const quickSuggestions = [
     "AI companies leading in healthcare innovation",
 ];
@@ -17,8 +18,10 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }) {
     const queryClient = useQueryClient();
     const { toast } = useToast();
     const chatEndRef = useRef(null);
+    const [, setLocation] = useLocation();
     const createIndexMutation = useMutation({
         mutationFn: async (data) => {
+            console.log("mutationFn called with", data);
             const response = await authService.apiRequest(`${import.meta.env.VITE_API_URL}/generate-index`, {
                 method: 'POST',
                 headers: {
@@ -32,6 +35,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }) {
             return response.json();
         },
         onSuccess: (data, variables) => {
+            console.log("Index creation response:", data);
             setMessages((prev) => [
                 ...prev,
                 { sender: 'ai', text: `✅ Index "${data.name}" created with ${data.stocks?.length || 0} stocks.\n${data.description || ''}` }
@@ -41,8 +45,16 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }) {
                 description: `"${data.name}" has been generated with ${data.stocks?.length || 0} stocks.`,
             });
             queryClient.invalidateQueries({ queryKey: ['indexes'] });
+            onClose();
+            if (data._id) {
+                console.log("Redirecting to: ", `/index/${data._id}`);
+                setTimeout(() => {
+                    setLocation(`/index/${data._id}`);
+                }, 100);
+            }
         },
         onError: (error) => {
+            console.log("Index creation error:", error);
             setMessages((prev) => [
                 ...prev,
                 { sender: 'ai', text: error.message || 'Failed to create index. Please try again.' }
@@ -95,5 +107,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }) {
     const handleSuggestion = (suggestion) => {
         setInput(suggestion);
     };
-    return (_jsx(Dialog, { open: isOpen, onOpenChange: handleClose, children: _jsxs(DialogContent, { className: "max-w-md flex flex-col h-[70vh] p-0 bg-gray-50 dark:bg-gray-900 border-none shadow-xl", children: [_jsxs("div", { className: "flex-1 overflow-y-auto p-4 space-y-4", children: [messages.map((msg, i) => (_jsx("div", { className: `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`, children: _jsx("div", { className: `rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`, children: msg.text }) }, i))), isLoading && (_jsx("div", { className: "flex justify-start", children: _jsx("div", { className: "rounded-2xl px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 animate-pulse text-sm", children: "AI is thinking..." }) })), _jsx("div", { ref: chatEndRef })] }), quickSuggestions.length > 0 && (_jsx("div", { className: "flex flex-wrap gap-2 px-4 pb-2", children: quickSuggestions.map((s, i) => (_jsx(Button, { variant: "secondary", size: "sm", onClick: () => handleSuggestion(s), children: s }, i))) })), _jsxs("form", { onSubmit: handleSend, className: "flex gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900", children: [_jsx(Input, { value: input, onChange: e => setInput(e.target.value), placeholder: "Type your investment idea...", className: "flex-1", disabled: isLoading }), _jsxs(Button, { type: "submit", disabled: isLoading || !input.trim(), className: "flex items-center gap-1", children: [_jsx(Send, { className: "h-4 w-4" }), "Send"] })] })] }) }));
+    return (_jsx(Dialog, { open: isOpen, onOpenChange: (open) => { if (!open) handleClose(); }, children: _jsxs(DialogContent, { className: "max-w-md flex flex-col h-[70vh] p-0 bg-gray-50 dark:bg-gray-900 border-none shadow-xl", children: [
+        _jsx("h2", { className: "sr-only", children: "Create Index" }),
+        _jsx("span", { className: "sr-only", id: "create-index-desc", children: "Create a new AI-generated index by describing your investment idea." }),
+        _jsxs("div", { className: "flex-1 overflow-y-auto p-4 space-y-4", "aria-describedby": "create-index-desc", children: [messages.map((msg, i) => (_jsx("div", { className: `flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`, children: _jsx("div", { className: `rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`, children: msg.text }) }, i))), isLoading && (_jsx("div", { className: "flex justify-start", children: _jsx("div", { className: "rounded-2xl px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 animate-pulse text-sm", children: "AI is thinking..." }) })), _jsx("div", { ref: chatEndRef })] }), quickSuggestions.length > 0 && (_jsx("div", { className: "flex flex-wrap gap-2 px-4 pb-2", children: quickSuggestions.map((s, i) => (_jsx(Button, { variant: "secondary", size: "sm", onClick: () => handleSuggestion(s), children: s }, i))) })), _jsxs("form", { onSubmit: handleSend, className: "flex gap-2 p-4 border-t bg-gray-50 dark:bg-gray-900", children: [_jsx(Input, { value: input, onChange: e => setInput(e.target.value), placeholder: "Type your investment idea...", className: "flex-1", disabled: isLoading }), _jsxs(Button, { type: "submit", disabled: isLoading || !input.trim(), className: "flex items-center gap-1", children: [_jsx(Send, { className: "h-4 w-4" }), "Send"] })] })] }) }));
 }
