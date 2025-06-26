@@ -190,7 +190,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative px-4 py-6 border-t border-gray-800 z-10">
+      <footer className="relative px-4 py-6 z-10">
         <div className="text-center text-sm text-gray-500 mb-4">
           <span>An AI product from </span>
           <span className="font-semibold text-white">public</span>
