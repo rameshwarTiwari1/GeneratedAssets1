@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { HeroSection } from "@/components/HeroSection";
 import { IndexCard } from "@/components/IndexCard";
 import { PerformanceChart } from "@/components/PerformanceChart";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { CreateIndexModal } from "@/components/CreateIndexModal";
 import { useWebSocket } from "@/hooks/useWebSocket";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
@@ -195,7 +194,7 @@ export default function Dashboard() {
     queryKey: ["indexes"],
     queryFn: async (): Promise<IndexData[]> => {
       const response = await authService.apiRequest(
-        "https://generatedassets1.onrender.com/api/indexes"
+        "http://localhost:5000/api/indexes"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch indexes");
@@ -209,7 +208,7 @@ export default function Dashboard() {
     queryKey: ["trending-indexes"],
     queryFn: async (): Promise<IndexData[]> => {
       const response = await fetch(
-        "https://generatedassets1.onrender.com/api/trending-indexes"
+        "http://localhost:5000/api/trending-indexes"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch trending indexes");
@@ -223,7 +222,7 @@ export default function Dashboard() {
     queryKey: ["portfolio"],
     queryFn: async (): Promise<PortfolioData> => {
       const response = await authService.apiRequest(
-        "https://generatedassets1.onrender.com/api/portfolio"
+        "http://localhost:5000/api/portfolio"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch portfolio");
@@ -236,7 +235,7 @@ export default function Dashboard() {
   const { data: marketData } = useQuery({
     queryKey: ["market-data"],
     queryFn: async (): Promise<MarketData> => {
-      const response = await fetch("https://generatedassets1.onrender.com/api/market-data");
+      const response = await fetch("http://localhost:5000/api/market-data");
       if (!response.ok) {
         throw new Error("Failed to fetch market data");
       }
@@ -293,7 +292,7 @@ export default function Dashboard() {
     setIsSearching(true);
     try {
       const response = await fetch(
-        `https://generatedassets1.onrender.com/api/search?query=${encodeURIComponent(query)}`
+        `http://localhost:5000/api/search?query=${encodeURIComponent(query)}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -355,7 +354,7 @@ export default function Dashboard() {
       }
 
       const response = await fetch(
-        `https://generatedassets1.onrender.com/api/stock-price/${stock.symbol}`
+        `http://localhost:5000/api/stock-price/${stock.symbol}`
       );
       const priceData: StockPriceResponse = await response.json();
 
@@ -449,118 +448,69 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-gray-900 dark:via-blue-950/30 dark:to-indigo-950/30">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="glass-card border-b border-gray-200/50 dark:border-gray-800/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center shadow-lg">
-                  <BarChart3 className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-xl font-bold text-gradient">
-                  Generated Assets
-                </span>
-                <Badge
-                  variant="secondary"
-                  className="text-xs bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                >
-                  BETA
-                </Badge>
-              </div>
-              <nav className="hidden md:flex space-x-6">
-                <Link
-                  href="/dashboard"
-                  className="text-gray-900 dark:text-gray-100 font-medium border-b-2 border-blue-600 dark:border-blue-400 pb-4 transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/indexes"
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 pb-4 transition-colors"
-                >
-                  My Indexes
-                </Link>
-                {/* <Link href="/explore" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 pb-4 transition-colors">
-                  Explore
-                </Link>
-                <Link href="/analytics" className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 pb-4 transition-colors">
-                  Analytics
-                </Link> */}
-              </nav>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Button
-                variant="ghost"
-                size="sm"
-                className="hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <Bell className="h-4 w-4" />
-              </Button>
-              <div className="relative group">
-                <Button
-                  variant="ghost"
-                  className="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center overflow-hidden shadow-lg">
-                    {user?.profilePhoto ? (
-                      <img
-                        src={user.profilePhoto}
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-white text-sm font-medium">
-                        {user ? getUserInitials(user) : "U"}
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {user ? getDisplayName(user) : "User"}
-                  </span>
-                </Button>
-                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-                  <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                      {user ? getDisplayName(user) : "User"}
-                    </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      {user?.email || "user@example.com"}
-                    </p>
-                  </div>
-                  <div className="py-1">
-                    <div
-                      onClick={() => setLocation("/profile")}
-                      className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center"
-                    >
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
-                    </div>
-                    <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center">
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
-                    </div>
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-                    <div
-                      onClick={handleLogout}
-                      className="px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Log out</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
+          <div className="flex items-center space-x-2 p-2 flex-grow">
+            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div>
           </div>
+          <nav className="flex items-center space-x-6">
+            <Link href="/dashboard" className="text-white font-medium border-b-2 border-blue-600 pb-4 transition-colors">Dashboard</Link>
+            <Link href="/indexes" className="text-white hover:text-gray-300 pb-4 transition-colors">My Indexes</Link>
+            <Button variant="ghost" size="sm" className="hover:bg-gray-800">
+              <Bell className="h-4 w-4" />
+            </Button>
+            <div className="relative group">
+              <Button variant="ghost" className="flex items-center space-x-2 hover:bg-gray-800">
+                <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center overflow-hidden shadow-lg">
+                  {user?.profilePhoto ? (
+                    <img src={user.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-white text-sm font-medium">{user ? getUserInitials(user) : "U"}</span>
+                  )}
+                </div>
+                <span className="text-sm font-medium text-white">{user ? getDisplayName(user) : "User"}</span>
+              </Button>
+              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+                <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {user ? getDisplayName(user) : "User"}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {user?.email || "user@example.com"}
+                  </p>
+                </div>
+                <div className="py-1">
+                  <div
+                    onClick={() => setLocation("/profile")}
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center"
+                  >
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </div>
+                  <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </div>
+                  <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+                  <div
+                    onClick={handleLogout}
+                    className="px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
         </div>
       </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black text-white">
         {/* Hero Section */}
-        <HeroSection onCreateIndex={() => setIsCreateModalOpen(true)} />
+        <HeroSection onCreateIndex={() => setLocation('/create-index')} />
 
         {/* Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
@@ -984,11 +934,9 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-6 h-6 gradient-primary rounded-lg flex items-center justify-center">
-                  <BarChart3 className="h-3 w-3 text-white" />
-                </div>
+                
                 <span className="font-bold text-gray-900 dark:text-gray-100">
-                  Generated Assets
+                  Snapfolio
                 </span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -1031,7 +979,7 @@ export default function Dashboard() {
           </div>
           <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 flex justify-between items-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              © 2024 Generated Assets. All rights reserved.
+              © 2024 Snapfolio. All rights reserved.
             </p>
             <div className="flex space-x-4">
               {["twitter", "linkedin", "github"].map((social) => (

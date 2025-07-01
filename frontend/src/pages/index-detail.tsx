@@ -52,7 +52,7 @@ export default function IndexDetail() {
   const { data: indexData, isLoading, error } = useQuery<IndexData>({
     queryKey: ['index', indexId],
     queryFn: async () => {
-      const response = await authService.apiRequest(`https://generatedassets1.onrender.com/api/index/${indexId}`);
+      const response = await authService.apiRequest(`http://localhost:5000/api/index/${indexId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch index');
       }
@@ -63,9 +63,9 @@ export default function IndexDetail() {
 
   if (!match || !indexId) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Invalid Index</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">Invalid Index</h1>
           <Link href="/">
             <Button>Go Back to Dashboard</Button>
           </Link>
@@ -76,12 +76,12 @@ export default function IndexDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-            <div className="h-64 bg-gray-200 rounded"></div>
-            <div className="h-96 bg-gray-200 rounded"></div>
+            <div className="h-8 bg-gray-800 rounded w-1/3"></div>
+            <div className="h-64 bg-gray-800 rounded"></div>
+            <div className="h-96 bg-gray-800 rounded"></div>
           </div>
         </div>
       </div>
@@ -90,10 +90,10 @@ export default function IndexDetail() {
 
   if (error || !indexData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Index Not Found</h1>
-          <p className="text-gray-600 mb-4">The requested index could not be found.</p>
+          <h1 className="text-2xl font-bold text-white mb-2">Index Not Found</h1>
+          <p className="text-gray-400 mb-4">The requested index could not be found.</p>
           <Link href="/">
             <Button>Go Back to Dashboard</Button>
           </Link>
@@ -124,56 +124,18 @@ export default function IndexDetail() {
   const isPositive = indexData.performance1d >= 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-gray-900 dark:via-blue-950/30 dark:to-indigo-950/30">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="glass-card border-b border-gray-200/50 dark:border-gray-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="hover:bg-gray-100 dark:hover:bg-gray-800">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gradient">{indexData.name}</h1>
-                <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="h-3 w-3" />
-                    <span>Created {formatDate(indexData.createdAt)}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <BarChart3 className="h-3 w-3" />
-                    <span>{indexData.stocks?.length || 0} stocks</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    {indexData.isPublic ? (
-                      <>
-                        <Globe className="h-3 w-3" />
-                        <span>Public</span>
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="h-3 w-3" />
-                        <span>Private</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm" className="border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
-                <Edit className="h-4 w-4 mr-2" />
-                Edit
-              </Button>
-              <Button variant="outline" size="sm" className="border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
-                <Share className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-            </div>
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
+          <div className="flex items-center space-x-2 p-2 flex-grow">
+            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div>
           </div>
+          <nav className="flex items-center space-x-6">
+            <Link href="/dashboard" className="text-white hover:text-gray-300 transition-colors">Dashboard</Link>
+            <Link href="/indexes" className="text-white hover:text-gray-300 transition-colors">My Indexes</Link>
+          </nav>
         </div>
       </header>
 
