@@ -20,6 +20,7 @@ import {
 
 interface PerformanceChartProps {
   indexId: string;
+  guestBacktesting?: any; // Accept guest backtesting data
 }
 
 interface NapkinChartData {
@@ -72,7 +73,11 @@ function downsample(data: ChartDatum[], step: number = 3): ChartDatum[] {
   return data.filter((_, idx) => idx % step === 0);
 }
 
-export function PerformanceChart({ indexId }: PerformanceChartProps) {
+function isValidObjectId(id: string) {
+  return /^[a-fA-F0-9]{24}$/.test(id);
+}
+
+export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChartProps) {
   const [selectedPeriod, setSelectedPeriod] = useState('1M');
   const [napkinChartData, setNapkinChartData] = useState<NapkinChartData | null>(null);
   const [isGeneratingChart, setIsGeneratingChart] = useState(false);
@@ -99,7 +104,7 @@ export function PerformanceChart({ indexId }: PerformanceChartProps) {
       }
       return response.json();
     },
-    enabled: !!indexId,
+    enabled: !guestBacktesting && isValidObjectId(indexId),
   });
 
   const generateNapkinChart = async () => {
@@ -184,6 +189,81 @@ export function PerformanceChart({ indexId }: PerformanceChartProps) {
     }
     return null;
   };
+
+  // If guestBacktesting is provided, use it directly
+  if (guestBacktesting) {
+    // Extract chart data and stats from guestBacktesting
+    const chartData = guestBacktesting.chartData || [];
+    // Format date for X-axis readability
+    const formattedChartData = chartData.map((d: any) => ({
+      ...d,
+      date: typeof d.date === 'string' ? d.date.split('T')[0] : d.date,
+    }));
+    // Defensive extraction for totalReturn and maxDrawdown
+    let totalReturn = 0;
+    let maxDrawdown = 0;
+    if (guestBacktesting.performance) {
+      // Try both '1Y' and '1y' keys for compatibility
+      const perf = guestBacktesting.performance;
+      const tr = perf['1Y']?.portfolioReturn ?? perf['1y']?.portfolioReturn ?? perf['1Y'] ?? perf['1y'];
+      const md = perf['1Y']?.maxDrawdown ?? perf['1y']?.maxDrawdown ?? perf.maxDrawdown;
+      totalReturn = typeof tr === 'number' && !isNaN(tr) ? tr : 0;
+      maxDrawdown = typeof md === 'number' && !isNaN(md) ? md : 0;
+    }
+    // Smooth but do not downsample for better visibility
+    const smoothedData = movingAverage(formattedChartData, 7);
+    const displayData = smoothedData;
+    return (
+      <Card className="glass-card hover-lift">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold text-gradient">Backtest Performance (Guest Preview)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 mb-6 text-center">
+            <div>
+              <p className="text-sm text-gray-400">Total returns</p>
+              <p className="text-3xl font-bold text-green-400">{totalReturn.toFixed(2)}%</p>
+            </div>
+            <div>
+              <p className="text-sm text-gray-400">Max drawdown</p>
+              <p className="text-3xl font-bold text-red-400">{maxDrawdown.toFixed(2)}%</p>
+            </div>
+          </div>
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={displayData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#9ca3af"
+                  tick={{ fill: '#6b7280' }}
+                  tickLine={{ stroke: '#4b5563' }}
+                  axisLine={{ stroke: '#4b5563' }}
+                />
+                <YAxis 
+                  domain={['auto', 'auto']}
+                  stroke="#9ca3af" 
+                  tickFormatter={(value) => `${value}%`}
+                  tick={{ fill: '#6b7280' }}
+                  tickLine={{ stroke: '#4b5563' }}
+                  axisLine={{ stroke: '#4b5563' }}
+                />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="asset"
+                  name="Asset"
+                  stroke="#a259ff"
+                  strokeWidth={2}
+                  dot={false}
+                  activeDot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="glass-card hover-lift">

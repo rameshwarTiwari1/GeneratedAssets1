@@ -80,7 +80,7 @@ export function StockTable({ stocks }: StockTableProps) {
       if (stock.sector.toLowerCase().includes('technology')) {
         reason = 'Major tech innovator with strong market position and growth potential.';
       } else if (stock.sector.toLowerCase().includes('healthcare')) {
-        reason = 'Healthcare leader with innovative products and stable revenue streams.';
+        reason = 'Healthcare leader with innovative produc  ts and stable revenue streams.';
       } else if (stock.sector.toLowerCase().includes('financial')) {
         reason = 'Financial services leader with strong balance sheet and market presence.';
       } else if (stock.sector.toLowerCase().includes('energy')) {
@@ -141,7 +141,7 @@ export function StockTable({ stocks }: StockTableProps) {
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="font-medium text-gray-900 dark:text-gray-100">
-                    {stock.weight.toFixed(2)}%
+                    {(stock.weight ?? 0).toFixed(2)}%
                   </div>
                 </TableCell>
               </TableRow>

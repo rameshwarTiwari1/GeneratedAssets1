@@ -2,16 +2,21 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Send } from 'lucide-react';
+import { Send, User, Bot, Loader2 } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authService } from '@/lib/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useLocation } from 'wouter';
+import { usePrompt } from '@/hooks/PromptContext';
 
 interface CreateIndexModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialPrompt?: string | null;
+  onIndexCreated?: (data: any) => void;
+  disableRedirect?: boolean;
+  variant?: 'modal' | 'panel';
+  onAiThinkingChange?: (thinking: boolean) => void;
 }
 
 const quickSuggestions = [
@@ -20,7 +25,7 @@ const quickSuggestions = [
 
 type Message = { sender: 'user' | 'ai', text: string };
 
-export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndexModalProps) {
+export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreated, disableRedirect = false, variant = 'modal', onAiThinkingChange }: CreateIndexModalProps) {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +33,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   const { toast } = useToast();
   const chatEndRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
+  const { setPrompt } = usePrompt();
+  const lastPromptRef = useRef<string | null>(null);
 
   console.log("CreateIndexModal component loaded");
 
@@ -63,12 +70,17 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
         description: `"${data.name}" has been generated with ${data.stocks?.length || 0} stocks.`,
       });
       queryClient.invalidateQueries({ queryKey: ['indexes'] });
-      onClose();
-      if (data._id) {
-        console.log("Redirecting to: ", `/index/${data._id}`);
-        setTimeout(() => {
-          setLocation(`/index/${data._id}`);
-        }, 100);
+      if (onIndexCreated) {
+        onIndexCreated(data);
+      }
+      if (!disableRedirect) {
+        onClose();
+        if (data._id) {
+          console.log("Redirecting to: ", `/index/${data._id}`);
+          setTimeout(() => {
+            setLocation(`/index/${data._id}`);
+          }, 100);
+        }
       }
     },
     onError: (error: any) => {
@@ -87,19 +99,24 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
   });
 
   useEffect(() => {
-    if (initialPrompt && isOpen) {
+    // If initialPrompt exists and is different from last used, trigger chat flow
+    if (isOpen && initialPrompt && initialPrompt !== lastPromptRef.current) {
       setMessages([
         { sender: 'ai', text: "Hi! I'm your AI investment assistant. Tell me about the type of companies or investment theme you're interested in, and I'll create a diversified portfolio for you." },
         { sender: 'user', text: initialPrompt },
       ]);
+      setInput('');
       setIsLoading(true);
       createIndexMutation.mutate({ prompt: initialPrompt.trim() });
-    } else if (isOpen) {
+      setPrompt(null);
+      lastPromptRef.current = initialPrompt;
+    } else if (isOpen && !initialPrompt && messages.length === 0) {
       setMessages([
         { sender: 'ai', text: "Hi! I'm your AI investment assistant. Tell me about the type of companies or investment theme you're interested in, and I'll create a diversified portfolio for you." },
       ]);
+      setInput('');
     }
-    setInput('');
+    // eslint-disable-next-line
   }, [initialPrompt, isOpen]);
 
   useEffect(() => {
@@ -107,6 +124,13 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isLoading]);
+
+  // Notify parent when AI thinking/loading state changes
+  useEffect(() => {
+    if (onAiThinkingChange) {
+      onAiThinkingChange(isLoading);
+    }
+  }, [isLoading, onAiThinkingChange]);
 
   const handleClose = () => {
     console.log("handleClose called");
@@ -131,6 +155,88 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt }: CreateIndex
     setInput(suggestion);
   };
 
+  // Panel mode rendering
+  if (variant === 'panel') {
+    return (
+      <div className="flex flex-col h-full w-full" role="region" aria-label="AI Investment Assistant Chat">
+        <div className="flex-1 overflow-y-auto p-0 space-y-2" aria-live="polite">
+          {messages.map((msg, i) => (
+            <div key={i} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+              {msg.sender === 'ai' && (
+                <div className="flex-shrink-0 w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-blue-300" />
+                </div>
+              )}
+              <div className={`rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm shadow ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`}
+                aria-label={msg.sender === 'user' ? 'You' : 'AI'}>
+                {msg.text}
+              </div>
+              {msg.sender === 'user' && (
+                <div className="flex-shrink-0 w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+              )}
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex items-end gap-2 justify-start">
+              <div className="flex-shrink-0 w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center">
+                <Bot className="w-5 h-5 text-blue-300" />
+              </div>
+              <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm flex items-center gap-2 animate-pulse shadow">
+                <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce mr-1" style={{animationDelay: '0ms'}}></span>
+                <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce mr-1" style={{animationDelay: '100ms'}}></span>
+                <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '200ms'}}></span>
+                <span className="ml-2">AI is thinking...</span>
+              </div>
+            </div>
+          )}
+          <div ref={chatEndRef} />
+        </div>
+        {quickSuggestions.length > 0 && (
+          <div className="flex flex-wrap gap-2 px-4 pb-2 min-w-0">
+            {quickSuggestions.map((s, i) => (
+              <Button key={i} variant="secondary" size="sm" onClick={() => handleSuggestion(s)}
+                className="truncate max-w-full rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800/80 shadow">
+                <span className="truncate max-w-[180px] md:max-w-[220px] lg:max-w-[260px]">{s}</span>
+              </Button>
+            ))}
+          </div>
+        )}
+        <form onSubmit={handleSend} className="px-4 pb-4" aria-label="Send a message to the AI assistant">
+          <div className="relative bg-gray-900 rounded-full p-2 flex items-center min-h-[100px] shadow-lg">
+            <textarea
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              placeholder="Type your investment idea..."
+              className="flex-1 bg-transparent rounded-full outline-none text-white placeholder-gray-400 px-2 text-base py-2 resize-none min-h-[36px] max-h-32 overflow-y-hidden scrollbar-hide"
+              disabled={isLoading}
+              style={{ minWidth: '100%' }}
+              rows={1}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  if (!isLoading && input.trim()) handleSend(e);
+                }
+              }}
+              aria-label="Type your message"
+            />
+            <Button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-blue-700 hover:bg-blue-800 p-2 flex items-center justify-center shadow"
+              style={{ minWidth: 0, width: 36, height: 36 }}
+              aria-label="Send message"
+            >
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  // Modal mode rendering (default)
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent className="max-w-md flex flex-col h-[70vh] p-0 bg-gray-50 dark:bg-gray-900 border-none shadow-xl">

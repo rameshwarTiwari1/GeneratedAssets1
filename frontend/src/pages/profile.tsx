@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ThemeToggle } from "../components/ThemeToggle";
 import { Link } from "wouter";
 import {
   ArrowLeft,
@@ -374,10 +373,10 @@ const ProfilePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading...</p>
+          <p className="mt-2 text-gray-400">Loading...</p>
         </div>
       </div>
     );
@@ -388,47 +387,24 @@ const ProfilePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-indigo-50/30 dark:from-gray-900 dark:via-blue-950/30 dark:to-indigo-950/30">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="glass-card border-b border-gray-200/50 dark:border-gray-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link href="/dashboard">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </Link>
-              <div>
-                <h1 className="text-xl font-bold text-gradient">
-                  Profile Settings
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Manage your account and preferences
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Export Data
-              </Button>
-            </div>
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
+          <div className="flex items-center space-x-2 p-2 flex-grow">
+            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div>
           </div>
+          <nav className="flex items-center space-x-6">
+            <Link href="/dashboard" className="text-white hover:text-gray-300 transition-colors">Dashboard</Link>
+            <Link href="/indexes" className="text-white hover:text-gray-300 transition-colors">My Indexes</Link>
+            <Button variant="ghost" size="sm" className="hover:bg-gray-800">
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </nav>
         </div>
       </header>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-black text-white">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Profile Info */}
           <div className="lg:col-span-2 space-y-6">

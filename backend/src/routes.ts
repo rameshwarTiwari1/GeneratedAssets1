@@ -15,7 +15,7 @@ import { insertIndexSchema } from "./shared/schema";
 import { z } from "zod";
 import authRoutes from "./routes/auth";
 import indexRoutes from "./routes/index";
-import { authenticateToken } from "./middleware/auth";
+import { authenticateToken, optionalAuth } from "./middleware/auth";
 
 // Add this interface for authenticated requests
 interface AuthRequest extends Request {
@@ -101,13 +101,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Index routes
   app.use("/api/indexes", indexRoutes);
 
-  // Generate index from natural language prompt (protected route)
-  app.post("/api/generate-index", authenticateToken, async (req: AuthRequest, res: Response, next: NextFunction) => {
+  // Generate index from natural language prompt (public route)
+  app.post("/api/generate-index", optionalAuth, async (req: AuthRequest, res: Response, next: NextFunction) => {
     const storage = storageMongoose;
     const storageMemOnly = storageMem;
     try {
       const { prompt } = req.body;
-      const userId = req.user._id.toString(); // Get user ID from authenticated request
+      const userId = req.user ? req.user._id.toString() : null; // Get user ID if authenticated
+      console.log('userId:', userId, 'req.user:', req.user);
       
       if (!prompt || typeof prompt !== 'string') {
         return res.status(400).json({ message: "Prompt is required" });
@@ -149,65 +150,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const performance30d = backtestingData.performance['1M']?.portfolioReturn || 0;
       const performance7d = avgPerformance * 7; // Approximate weekly from daily
       const alpha1y = backtestingData.performance['1Y']?.alpha || 0;
-      
-      // Create index in storage with userId
-      const newIndex = await storage.createIndex({
-        prompt,
-        name: aiResponse.indexName,
-        description: aiResponse.description,
-        userId, // Include userId
-        isPublic: false,
-        totalValue,
-        performance1d: avgPerformance,
-        performance7d: performance7d,
-        performance30d: performance30d,
-        performance1y: performance1y,
-        benchmarkSp500: benchmarks.sp500,
-        benchmarkNasdaq: benchmarks.nasdaq,
-        aiAnalysis: aiResponse.analysis, // Store AI analysis
-      });
 
-      // Add stocks to index
-      const stocks = await Promise.all(
-        stocksData.map(async (stockData) => {
-          return await storage.addStockToIndex(newIndex._id, {
-            indexId: newIndex._id as any,
-            symbol: stockData.symbol,
-            name: stockData.name,
-            price: stockData.price,
-            sector: stockData.sector,
-            marketCap: stockData.marketCap,
-            weight: 1,
-            change1d: stockData.change1d || 0,
-            changePercent1d: stockData.changePercent1d || 0,
-          });
-        })
-      );
-
-      // Store historical backtesting data
-      for (const point of backtestingData.historical.slice(-30)) { // Last 30 days
-        await storageMongoose.addHistoricalData({
-          indexId: newIndex._id as any,
-          date: point.date,
-          value: point.portfolioValue,
-          sp500Value: point.sp500Value,
-          nasdaqValue: point.nasdaqValue,
+      let newIndex: any = null;
+      let stocks: any[] = [];
+      if (userId) {
+        // Create index in storage with userId
+        newIndex = await storage.createIndex({
+          prompt,
+          name: aiResponse.indexName,
+          description: aiResponse.description,
+          userId, // Include userId
+          isPublic: false,
+          totalValue,
+          performance1d: avgPerformance,
+          performance7d: performance7d,
+          performance30d: performance30d,
+          performance1y: performance1y,
+          benchmarkSp500: benchmarks.sp500,
+          benchmarkNasdaq: benchmarks.nasdaq,
+          aiAnalysis: aiResponse.analysis, // Store AI analysis
         });
+
+        // Add stocks to index
+        stocks = await Promise.all(
+          stocksData.map(async (stockData) => {
+            return await storage.addStockToIndex(newIndex._id, {
+              indexId: newIndex._id as any,
+              symbol: stockData.symbol,
+              name: stockData.name,
+              price: stockData.price,
+              sector: stockData.sector,
+              marketCap: stockData.marketCap,
+              weight: 1,
+              change1d: stockData.change1d || 0,
+              changePercent1d: stockData.changePercent1d || 0,
+            });
+          })
+        );
+
+        // Store historical backtesting data
+        for (const point of backtestingData.historical.slice(-30)) { // Last 30 days
+          await storageMongoose.addHistoricalData({
+            indexId: newIndex._id as any,
+            date: point.date,
+            value: point.portfolioValue,
+            sp500Value: point.sp500Value,
+            nasdaqValue: point.nasdaqValue,
+          });
+        }
+      } else {
+        // For guests, just return the generated data, do not save
+        newIndex = {
+          prompt,
+          name: aiResponse.indexName,
+          description: aiResponse.description,
+          isPublic: true, // Always public for guests
+          totalValue,
+          performance1d: avgPerformance,
+          performance7d: performance7d,
+          performance30d: performance30d,
+          performance1y: performance1y,
+          benchmarkSp500: benchmarks.sp500,
+          benchmarkNasdaq: benchmarks.nasdaq,
+          aiAnalysis: aiResponse.analysis,
+          _id: `guest-${Date.now()}`,
+          createdAt: new Date().toISOString(),
+          stocks: stocksData,
+        };
+        stocks = stocksData;
       }
 
       const result = {
         ...newIndex,
         stocks,
         backtesting: backtestingData.performance,
+        chartData: backtestingData.historical,
         alpha: alpha1y,
         aiAnalysis: aiResponse.analysis,
       };
 
-      // Broadcast new index to connected clients
-      broadcast({
-        type: 'new_index',
-        data: result,
-      });
+      // Broadcast new index to connected clients only if saved
+      if (userId) {
+        broadcast({
+          type: 'new_index',
+          data: result,
+        });
+      }
 
       res.json(result);
     }
