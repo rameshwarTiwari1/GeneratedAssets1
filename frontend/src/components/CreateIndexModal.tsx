@@ -42,7 +42,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
     mutationFn: async (data: { prompt: string }) => {
       console.log("mutationFn called with", data);
       const response = await authService.apiRequest(
-        "http://localhost:5000/api/generate-index",
+        "https://generatedassets1.onrender.com/api/generate-index",
         {
           method: "POST",
           headers: {

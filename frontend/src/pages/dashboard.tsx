@@ -194,7 +194,7 @@ export default function Dashboard() {
     queryKey: ["indexes"],
     queryFn: async (): Promise<IndexData[]> => {
       const response = await authService.apiRequest(
-        "http://localhost:5000/api/indexes"
+        "https://generatedassets1.onrender.com/api/indexes"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch indexes");
@@ -208,7 +208,7 @@ export default function Dashboard() {
     queryKey: ["trending-indexes"],
     queryFn: async (): Promise<IndexData[]> => {
       const response = await fetch(
-        "http://localhost:5000/api/trending-indexes"
+        "https://generatedassets1.onrender.com/api/trending-indexes"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch trending indexes");
@@ -222,7 +222,7 @@ export default function Dashboard() {
     queryKey: ["portfolio"],
     queryFn: async (): Promise<PortfolioData> => {
       const response = await authService.apiRequest(
-        "http://localhost:5000/api/portfolio"
+        "https://generatedassets1.onrender.com/api/portfolio"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch portfolio");
@@ -235,7 +235,7 @@ export default function Dashboard() {
   const { data: marketData } = useQuery({
     queryKey: ["market-data"],
     queryFn: async (): Promise<MarketData> => {
-      const response = await fetch("http://localhost:5000/api/market-data");
+      const response = await fetch("https://generatedassets1.onrender.com/api/market-data");
       if (!response.ok) {
         throw new Error("Failed to fetch market data");
       }
@@ -292,7 +292,7 @@ export default function Dashboard() {
     setIsSearching(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/search?query=${encodeURIComponent(query)}`
+        `https://generatedassets1.onrender.com/api/search?query=${encodeURIComponent(query)}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -354,7 +354,7 @@ export default function Dashboard() {
       }
 
       const response = await fetch(
-        `http://localhost:5000/api/stock-price/${stock.symbol}`
+        `https://generatedassets1.onrender.com/api/stock-price/${stock.symbol}`
       );
       const priceData: StockPriceResponse = await response.json();
 

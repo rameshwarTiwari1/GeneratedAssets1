@@ -52,7 +52,7 @@ export default function IndexDetail() {
   const { data: indexData, isLoading, error } = useQuery<IndexData>({
     queryKey: ['index', indexId],
     queryFn: async () => {
-      const response = await authService.apiRequest(`http://localhost:5000/api/index/${indexId}`);
+      const response = await authService.apiRequest(`https://generatedassets1.onrender.com/api/index/${indexId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch index');
       }
