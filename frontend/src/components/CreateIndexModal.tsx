@@ -152,7 +152,10 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
   };
 
   const handleSuggestion = (suggestion: string) => {
-    setInput(suggestion);
+    setInput('');
+    setMessages((prev) => [...prev, { sender: 'user', text: suggestion }]);
+    setIsLoading(true);
+    createIndexMutation.mutate({ prompt: suggestion.trim() });
   };
 
   // Panel mode rendering

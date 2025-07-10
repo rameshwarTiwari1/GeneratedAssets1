@@ -194,10 +194,11 @@ export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChart
   if (guestBacktesting) {
     // Extract chart data and stats from guestBacktesting
     const chartData = guestBacktesting.chartData || [];
-    // Format date for X-axis readability
+    // Map portfolioValue to asset for compatibility
     const formattedChartData = chartData.map((d: any) => ({
       ...d,
       date: typeof d.date === 'string' ? d.date.split('T')[0] : d.date,
+      asset: d.asset ?? d.portfolioValue // Ensure 'asset' field exists for chart
     }));
     // Defensive extraction for totalReturn and maxDrawdown
     let totalReturn = 0;
