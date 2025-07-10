@@ -208,7 +208,7 @@ const CreateAndPreviewIndex: React.FC = () => {
 
         {/* Right: Flexible main content */}
         <div className="flex-1 h-screen flex flex-col bg-black p-4 md:p-8 overflow-y-auto transition-all duration-300 ease-in-out">
-          {!indexData ? (
+          {loading || indexData === null ? (
             <div className="flex-1 flex flex-col items-center justify-center">
               <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 animate-fade-in">
                 {/* Header Skeleton */}

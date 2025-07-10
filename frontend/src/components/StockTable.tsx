@@ -106,7 +106,6 @@ export function StockTable({ stocks }: StockTableProps) {
             <TableHead className="text-gray-900 dark:text-gray-100">Market Cap</TableHead>
             <TableHead className="text-gray-900 dark:text-gray-100">Relevance</TableHead>
             <TableHead className="text-gray-900 dark:text-gray-100">Reason</TableHead>
-            <TableHead className="text-right text-gray-900 dark:text-gray-100">Weight</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -116,9 +115,18 @@ export function StockTable({ stocks }: StockTableProps) {
             return (
               <TableRow key={stock.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                 <TableCell>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-gray-100">{stock.name}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{stock.symbol}</div>
+                  <div className="flex items-center space-x-3">
+                    {/* Company Logo */}
+                    <img
+                      src={`https://logo.clearbit.com/${stock.symbol ? stock.symbol.toLowerCase() + '.com' : 'placeholder.com'}`}
+                      alt={stock.symbol + ' logo'}
+                      className="w-8 h-8 rounded bg-white border border-gray-200 dark:border-gray-700 object-contain"
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/fallback-logo.png'; }}
+                    />
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{stock.name}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{stock.symbol}</div>
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -137,11 +145,6 @@ export function StockTable({ stocks }: StockTableProps) {
                 <TableCell>
                   <div className="max-w-[300px] text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                     {reason}
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="font-medium text-gray-900 dark:text-gray-100">
-                    {(stock.weight ?? 0).toFixed(2)}%
                   </div>
                 </TableCell>
               </TableRow>
