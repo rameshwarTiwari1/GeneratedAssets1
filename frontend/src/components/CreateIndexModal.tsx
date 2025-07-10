@@ -21,6 +21,10 @@ interface CreateIndexModalProps {
 
 const quickSuggestions = [
   "AI companies leading in healthcare innovation",
+  "Top green energy stocks for 2025",
+  "Blockchain companies disrupting finance",
+  // "High-growth SaaS businesses under $10B market cap",
+
 ];
 
 type Message = { sender: 'user' | 'ai', text: string };
@@ -36,11 +40,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
   const { setPrompt } = usePrompt();
   const lastPromptRef = useRef<string | null>(null);
 
-  console.log("CreateIndexModal component loaded");
-
   const createIndexMutation = useMutation({
     mutationFn: async (data: { prompt: string }) => {
-      console.log("mutationFn called with", data);
       const response = await authService.apiRequest(
         "https://generatedassets1.onrender.com/api/generate-index",
         {
@@ -59,24 +60,20 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
       }
       return response.json();
     },
-    onSuccess: (data, variables) => {
-      console.log("Index creation response:", data);
+    onSuccess: (data) => {
       setMessages((prev) => [
         ...prev,
-        { sender: 'ai', text: `✅ Index "${data.name}" created with ${data.stocks?.length || 0} stocks.\n${data.description || ''}` }
+        { sender: 'ai', text: `✅ Index "${data.name}" created with ${data.stocks?.length || 0} stocks.\n${data.description || ''}` },
       ]);
       toast({
         title: "Index created successfully!",
         description: `"${data.name}" has been generated with ${data.stocks?.length || 0} stocks.`,
       });
       queryClient.invalidateQueries({ queryKey: ['indexes'] });
-      if (onIndexCreated) {
-        onIndexCreated(data);
-      }
+      onIndexCreated?.(data);
       if (!disableRedirect) {
         onClose();
         if (data._id) {
-          console.log("Redirecting to: ", `/index/${data._id}`);
           setTimeout(() => {
             setLocation(`/index/${data._id}`);
           }, 100);
@@ -84,10 +81,9 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
       }
     },
     onError: (error: any) => {
-      console.log("Index creation error:", error);
       setMessages((prev) => [
         ...prev,
-        { sender: 'ai', text: error.message || 'Failed to create index. Please try again.' }
+        { sender: 'ai', text: error.message || 'Failed to create index. Please try again.' },
       ]);
       toast({
         title: "Failed to create index",
@@ -99,7 +95,6 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
   });
 
   useEffect(() => {
-    // If initialPrompt exists and is different from last used, trigger chat flow
     if (isOpen && initialPrompt && initialPrompt !== lastPromptRef.current) {
       setMessages([
         { sender: 'ai', text: "Hi! I'm your AI investment assistant. Tell me about the type of companies or investment theme you're interested in, and I'll create a diversified portfolio for you." },
@@ -116,7 +111,6 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
       ]);
       setInput('');
     }
-    // eslint-disable-next-line
   }, [initialPrompt, isOpen]);
 
   useEffect(() => {
@@ -125,15 +119,11 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
     }
   }, [messages, isLoading]);
 
-  // Notify parent when AI thinking/loading state changes
   useEffect(() => {
-    if (onAiThinkingChange) {
-      onAiThinkingChange(isLoading);
-    }
+    onAiThinkingChange?.(isLoading);
   }, [isLoading, onAiThinkingChange]);
 
   const handleClose = () => {
-    console.log("handleClose called");
     if (isOpen) {
       setInput('');
       setMessages([]);
@@ -142,7 +132,6 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
   };
 
   const handleSend = (e: React.FormEvent) => {
-    console.log("handleSend called");
     e.preventDefault();
     if (!input.trim()) return;
     setMessages((prev) => [...prev, { sender: 'user', text: input.trim() }]);
@@ -158,7 +147,6 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
     createIndexMutation.mutate({ prompt: suggestion.trim() });
   };
 
-  // Panel mode rendering
   if (variant === 'panel') {
     return (
       <div className="flex flex-col h-full w-full" role="region" aria-label="AI Investment Assistant Chat">
@@ -166,8 +154,8 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
           {messages.map((msg, i) => (
             <div key={i} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.sender === 'ai' && (
-                <div className="flex-shrink-0 w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-blue-300" />
+                <div className="flex-shrink-0 w-8 h-8 bg-dark rounded-full flex items-center justify-center">
+                  <img src="/logo.png" alt="Logo" />
                 </div>
               )}
               <div className={`rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm shadow ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`}
@@ -183,14 +171,15 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
           ))}
           {isLoading && (
             <div className="flex items-end gap-2 justify-start">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-900 rounded-full flex items-center justify-center">
-                <Bot className="w-5 h-5 text-blue-300" />
+              <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center">
+                {/* <Bot className="w-5 h-5 text-blue-300" /> */}
+                <img src="/logo.png" alt="Logo" />
               </div>
               <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm flex items-center gap-2 animate-pulse shadow">
                 <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce mr-1" style={{animationDelay: '0ms'}}></span>
                 <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce mr-1" style={{animationDelay: '100ms'}}></span>
                 <span className="inline-block w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{animationDelay: '200ms'}}></span>
-                <span className="ml-2">AI is thinking...</span>
+                <span className="ml-2">Your index is Getting Created</span>
               </div>
             </div>
           )}
@@ -206,18 +195,22 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
             ))}
           </div>
         )}
-        <form onSubmit={handleSend} className="px-4 pb-4" aria-label="Send a message to the AI assistant">
-          <div className="relative bg-gray-900 rounded-full p-2 flex items-center min-h-[100px] shadow-lg">
+        <form
+          onSubmit={handleSend}
+          className="p-1"
+          aria-label="Send a message to the AI assistant"
+        >
+          <div className="relative bg-gray-900 rounded-full p-2 flex items-center min-h-[50px] shadow-lg">
             <textarea
               value={input}
-              onChange={e => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value)}
               placeholder="Type your investment idea..."
-              className="flex-1 bg-transparent rounded-full outline-none text-white placeholder-gray-400 px-2 text-base py-2 resize-none min-h-[36px] max-h-32 overflow-y-hidden scrollbar-hide"
+              className="flex-1 bg-transparent rounded-full outline-none text-white placeholder-gray-400 p-3 text-sm py-2 resize-none min-h-[36px] max-h-32 overflow-y-hidden scrollbar-hide"
               disabled={isLoading}
-              style={{ minWidth: '100%' }}
+              style={{ minWidth: "100%" }}
               rows={1}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   if (!isLoading && input.trim()) handleSend(e);
                 }
@@ -227,11 +220,15 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
             <Button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-blue-700 hover:bg-blue-800 p-2 flex items-center justify-center shadow"
-              style={{ minWidth: 0, width: 36, height: 36 }}
+              className="text-white absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-blue-900 hover:bg-blue-800 p-2 flex items-center justify-center shadow"
+              style={{ minWidth: 0, width: 36, height: 36, cursor: 'pointer' }}
               aria-label="Send message"
             >
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
         </form>
@@ -239,13 +236,11 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
     );
   }
 
-  // Modal mode rendering (default)
   return (
     <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent className="max-w-md flex flex-col h-[70vh] p-0 bg-gray-50 dark:bg-gray-900 border-none shadow-xl">
         <DialogTitle className="sr-only">Create Index</DialogTitle>
-        <span className="sr-only" id="create-index-desc">Create a new AI-generated index by describing your investment idea.</span>
-        <div className="flex-1 overflow-y-auto p-4 space-y-4" aria-describedby="create-index-desc">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`rounded-2xl px-4 py-2 max-w-[75%] whitespace-pre-line text-sm ${msg.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100'}`}>
@@ -256,7 +251,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
           {isLoading && (
             <div className="flex justify-start">
               <div className="rounded-2xl px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 animate-pulse text-sm">
-                AI is thinking...
+                Your index is getting created ...
               </div>
             </div>
           )}
@@ -287,4 +282,4 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
       </DialogContent>
     </Dialog>
   );
-} 
+}

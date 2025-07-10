@@ -5,6 +5,7 @@ import { FormEvent, useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { usePrompt } from "@/hooks/PromptContext";
 import { Marquee } from "@/components/Marquee";
+import { FaXTwitter } from "react-icons/fa6";
 
 interface FloatingItem {
   id: number;
@@ -110,8 +111,9 @@ export default function HomePage() {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
-            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div>
+                        <a href="/" className="flex items-center">
+            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
@@ -119,6 +121,13 @@ export default function HomePage() {
             <Button asChild className="bg-black hover:bg-gray-900 text-white border border-gray-700 rounded-lg px-4 py-2 ml-2">
               <Link href="/auth">Login</Link>
             </Button>
+             <a
+              href="https://twitter.com/yourusername"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaXTwitter />
+            </a>
           </nav>
         </div>
       </header>
@@ -168,6 +177,8 @@ export default function HomePage() {
                     <ArrowUp className="h-5 w-5" />
                   )}
                 </Button>
+
+                
               </form>
             </>
           )}
@@ -195,7 +206,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative px-4 py-6 z-10">
+      {/* <footer className="relative px-4 py-6 z-10">
         <div className="text-center text-sm text-gray-500 mb-4">
           <span>An AI product from </span>
           <span className="font-semibold text-white">public</span>
@@ -208,16 +219,16 @@ export default function HomePage() {
           benchmark S&P 500. You cannot invest via this website. This
           information is provided for educational purposes only. By using this
           tool, you agree to the Snapfolio{" "}
-          {/* <a href="#" className="text-blue-400 hover:underline">
+          <a href="#" className="text-blue-400 hover:underline">
             User Agreement
           </a>{" "}
           and{" "}
           <a href="#" className="text-blue-400 hover:underline">
             Acceptable Use Policy
-          </a> */}
+          </a>
           .
         </p>
-        {/* <nav className="flex justify-center gap-6 flex-wrap">
+        <nav className="flex justify-center gap-6 flex-wrap">
           <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
             User Agreement
           </a>
@@ -233,7 +244,14 @@ export default function HomePage() {
           <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
             Terms of Service
           </a>
-        </nav> */}
+        </nav>
+      </footer> */}
+
+      <footer className="relative px-4 py-6 z-10">
+        <div className="text-center text-sm text-gray-500 mb-4">
+          <span>Snapfolio 2025  All Rights Reversed. </span>
+        </div>
+      
       </footer>
 
       <style>{`

@@ -138,8 +138,9 @@ const CreateAndPreviewIndex: React.FC = () => {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
-            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div>
+                        <a href="/" className="flex items-center">
+            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
@@ -181,7 +182,8 @@ const CreateAndPreviewIndex: React.FC = () => {
           {sidebarOpen && (
             <div className="flex flex-col h-full max-h-screen p-4 md:p-8">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold break-words">Create Index</h2>
+                {/* <h2 className="text-2xl font-bold break-words">Create Index</h2> */}
+                <img src="/logo.png" alt="Logo" className="w-12 h-12" />
                 <Button
                   variant="outline"
                   className="border-gray-600 text-white hover:bg-gray-800"
@@ -329,7 +331,7 @@ const CreateAndPreviewIndex: React.FC = () => {
                       chartData: Array.isArray(indexData.chartData) ? indexData.chartData : [],
                     }}
                   />
-                  <div className="text-xs text-gray-400 text-center mt-2">Please log in to see the full chart.</div>
+                  {/* <div className="text-xs text-gray-400 text-center mt-2">Please log in to see the full chart.</div> */}
                 </div>
               )}
               {/* Stock Table */}

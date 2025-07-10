@@ -453,8 +453,9 @@ export default function Dashboard() {
       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
-            <img src="/logo.png" alt="Logo" className="w-6 h-6" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div>
+                        <a href="/" className="flex items-center">
+            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             <Link href="/dashboard" className="text-white font-medium border-b-2 border-blue-600 pb-4 transition-colors">Dashboard</Link>
@@ -586,7 +587,7 @@ export default function Dashboard() {
               <CardContent className="space-y-4">
                 <div>
                   <div className="flex justify-between items-center mb-1">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm fw-bold text-gray-600 dark:text-gray-400">
                       Total Value
                     </span>
                     <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -594,7 +595,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm fw-bold text-gray-600 dark:text-gray-400">
                       Today's Change
                     </span>
                     <span className="text-lg font-semibold performance-positive">
@@ -605,7 +606,7 @@ export default function Dashboard() {
                 </div>
                 <div className="border-t border-gray-100 dark:border-gray-800 pt-4 space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm fw-bold text-gray-600 dark:text-gray-400">
                       Active Indexes
                     </span>
                     <span className="font-semibold text-gray-900 dark:text-gray-100">
@@ -613,7 +614,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm fw-bold text-gray-600 dark:text-gray-400">
                       Total Stocks
                     </span>
                     <span className="font-semibold text-gray-900 dark:text-gray-100">
@@ -621,7 +622,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                    <span className="text-sm fw-bold text-gray-600 dark:text-gray-400">
                       Avg. Performance
                     </span>
                     <span className="font-semibold performance-positive">

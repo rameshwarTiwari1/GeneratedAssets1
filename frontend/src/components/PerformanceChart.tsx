@@ -217,7 +217,7 @@ export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChart
     return (
       <Card className="glass-card hover-lift">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gradient">Backtest Performance (Guest Preview)</CardTitle>
+          <CardTitle className="text-xl font-semibold text-gradient">Backtest Performance</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4 mb-6 text-center">
