@@ -80,7 +80,7 @@ body, html {
 
 /* Override glass-card and metric-card for black theme */
 .glass-card, .metric-card {
-  background: rgba(0,0,0,0.9) !important;
+  background: -webkit-linear-gradient(225deg, rgb(15, 15, 15) 0%, rgb(27, 27, 27) 100%);
   border: 1px solid #222 !important;
   color: #fff !important;
 }
@@ -363,3 +363,23 @@ button,a{
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+@keyframes loading-pipe {
+  0% {
+    left: -100%;
+    width: 40%;
+  }
+  50% {
+    left: 30%;
+    width: 70%;
+  }
+  100% {
+    left: 100%;
+    width: 40%;
+  }
+}
+
+.animate-loading-pipe {
+  animation: loading-pipe 1.5s ease-in-out infinite;
+}
+

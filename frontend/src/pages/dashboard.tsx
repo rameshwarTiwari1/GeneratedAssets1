@@ -451,7 +451,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
+        <div className="max-w-7xl mx-auto px-2 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
                         <a href="/" className="flex items-center">
             <img src="/logo.png" alt="Logo" className="w-12 h-12" />
