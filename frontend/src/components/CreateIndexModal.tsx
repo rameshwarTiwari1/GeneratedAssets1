@@ -17,6 +17,7 @@ interface CreateIndexModalProps {
   disableRedirect?: boolean;
   variant?: 'modal' | 'panel';
   onAiThinkingChange?: (thinking: boolean) => void;
+  setIsLoadings?: boolean;
 }
 
 const quickSuggestions = [
@@ -29,7 +30,7 @@ const quickSuggestions = [
 
 type Message = { sender: 'user' | 'ai', text: string };
 
-export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreated, disableRedirect = false, variant = 'modal', onAiThinkingChange }: CreateIndexModalProps) {
+export function CreateIndexModal({ isOpen, setIsLoadings, onClose, initialPrompt, onIndexCreated, disableRedirect = false, variant = 'modal', onAiThinkingChange }: CreateIndexModalProps) {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
 
   const createIndexMutation = useMutation({
     mutationFn: async (data: { prompt: string }) => {
+      setIsLoading(true);
       const response = await authService.apiRequest(
         "https://generatedassets1.onrender.com/api/generate-index",
         {
@@ -169,7 +171,7 @@ export function CreateIndexModal({ isOpen, onClose, initialPrompt, onIndexCreate
               )}
             </div>
           ))}
-          {isLoading && (
+          {(isLoading || setIsLoadings ) && (
             <div className="flex items-end gap-2 justify-start">
               <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center">
                 {/* <Bot className="w-5 h-5 text-blue-300" /> */}

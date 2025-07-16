@@ -132,6 +132,12 @@ const CreateAndPreviewIndex: React.FC = () => {
 
   const isPositive = indexData?.performance1d && indexData.performance1d >= 0;
 
+  console.log("createindex", indexData, navPrompt, prompt, );
+
+  const load= indexData == null ? true : false;
+  
+console.log("load",load);
+
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Navbar */}
@@ -193,7 +199,8 @@ const CreateAndPreviewIndex: React.FC = () => {
                 </Button>
               </div>
               <div className="flex-1 flex flex-col min-h-0">
-                <CreateIndexModal
+                <CreateIndexModal 
+                  setIsLoadings={load}
                   key={modalKey}
                   isOpen={modalOpen}
                   onClose={() => setModalOpen(true)}
