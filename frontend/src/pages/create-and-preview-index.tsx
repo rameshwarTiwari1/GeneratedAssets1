@@ -219,33 +219,8 @@ console.log("load",load);
         <div className="flex-1 h-screen flex flex-col bg-black p-4 md:p-8 overflow-y-auto transition-all duration-300 ease-in-out">
           {loading || indexData === null ? (
             <div className="flex-1 flex flex-col items-center justify-center">
-              <div className="w-full max-w-4xl mx-auto flex flex-col gap-8 animate-fade-in">
-                {/* Header Skeleton */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                  <div className="flex-1">
-                    <Skeleton className="h-8 w-2/3 mb-2" />
-                    <div className="flex items-center gap-4 mt-2">
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-4 w-20" />
-                      <Skeleton className="h-4 w-16" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-8 w-20" />
-                </div>
-                {/* Stat Cards Skeleton */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {[1,2,3,4].map(i => (
-                    <Skeleton key={i} className="h-24 w-full" />
-                  ))}
-                </div>
-                {/* Description Skeleton */}
-                <Skeleton className="h-20 w-full mb-4" />
-                {/* Chart Skeleton */}
-                <Skeleton className="h-56 w-full mb-4" />
-                {/* Table Skeleton */}
-                <Skeleton className="h-40 w-full" />
-              </div>
-              <div className="mt-6 text-gray-800 text-center text-sm">Waiting for index to be created...</div>
+              <img src="/logo.png" alt="Snapfolio Logo" className="w-16 h-16 mb-2 animate-pulse" />
+              <div className="mt-1 text-gray-300 text-center text-sm font-semibold">Waiting for index to be created...</div>
             </div>
           ) : error ? (
             <div className="flex-1 flex items-center justify-center text-lg text-red-400">{error}</div>
@@ -291,7 +266,13 @@ console.log("load",load);
                       <BarChart3 className="h-4 w-4 text-blue-500" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">vs S&P 500</span>
                     </div>
-                    <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">+{((indexData.performance1d || 0) - 0.8).toFixed(2)}%</div>
+                    {(() => {
+                      const sp500Diff = (indexData.performance1d || 0) - 0.8;
+                      const isPositiveSp500 = sp500Diff >= 0;
+                      return (
+                        <div className={`text-2xl font-bold ${isPositiveSp500 ? 'performance-positive text-green-500' : 'performance-negative text-red-500'}`}>{isPositiveSp500 ? '+' : ''}{sp500Diff.toFixed(2)}%</div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
                 <Card className="glass-card hover-lift">
@@ -300,7 +281,13 @@ console.log("load",load);
                       <BarChart3 className="h-4 w-4 text-purple-500" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">vs NASDAQ</span>
                     </div>
-                    <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">+{((indexData.performance1d || 0) + 0.3).toFixed(2)}%</div>
+                    {(() => {
+                      const nasdaqDiff = (indexData.performance1d || 0) + 0.3;
+                      const isPositiveNasdaq = nasdaqDiff >= 0;
+                      return (
+                        <div className={`text-2xl font-bold ${isPositiveNasdaq ? 'performance-positive text-green-500' : 'performance-negative text-red-500'}`}>{isPositiveNasdaq ? '+' : ''}{nasdaqDiff.toFixed(2)}%</div>
+                      );
+                    })()}
                   </CardContent>
                 </Card>
               </div>
