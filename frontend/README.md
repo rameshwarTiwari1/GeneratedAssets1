@@ -6,7 +6,7 @@ This is the frontend for the Generated Assets application, built with React, Typ
 
 - 🔐 Email/Password Authentication
 - 🔑 Google OAuth Integration
-- 🔄 Session Management
+- 🔄 Session Management 
 - 👤 User Profile Management
 - 🔄 Token-based Authentication
 
