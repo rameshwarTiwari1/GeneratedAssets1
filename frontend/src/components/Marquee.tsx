@@ -46,13 +46,16 @@ export const Marquee: React.FC<MarqueeProps> = ({
       >
         {items.map((text, index) => (
           <Button
-            key={`item-${index}`}
-            variant="outline"
-            className="rounded-full mx-2 my-1"
-            onClick={() => onItemClick(text)}
-          >
-            {text}
-          </Button>
+          key={`item-${index}`}
+          variant="outline"
+          className="rounded-full mx-2 my-1"
+          
+          onClick={() => onItemClick(text)}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#3a3a3a')}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
+        >
+          {text}
+        </Button>
         ))}
       </motion.div>
       <motion.div
@@ -66,6 +69,8 @@ export const Marquee: React.FC<MarqueeProps> = ({
             variant="outline"
             className="rounded-full mx-2 my-1"
             onClick={() => onItemClick(text)}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#3a3a3a')}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = '')}
           >
             {text}
           </Button>

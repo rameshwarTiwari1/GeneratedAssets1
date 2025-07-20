@@ -116,8 +116,8 @@ export default function HomePage() {
             <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a>
+            {/* <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
+            <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a> */}
             <Button asChild className="bg-black hover:bg-gray-900 text-white border border-gray-700 rounded-lg px-4 py-2 ml-2">
               <Link href="/auth">Login</Link>
             </Button>
@@ -188,19 +188,23 @@ export default function HomePage() {
             className="space-y-4 animate-fade-in-up"
             style={{ animationDelay: "0.6s" }}
           >
-            <Marquee
-              items={firstRowExamples}
-              onItemClick={handleExampleClick}
-              speed={40}
-              className="bg-black"
-            />
-            <Marquee
-              items={secondRowExamples}
-              onItemClick={handleExampleClick}
-              speed={50}
-              direction="right"
-              className="bg-black"
-            />
+            <div className="transition-colors duration-200  rounded-lg">
+              <Marquee
+                items={firstRowExamples}
+                onItemClick={handleExampleClick}
+                speed={40}
+                // className="bg-black hover:bg-[#111111] "
+              />
+            </div>
+            <div className="transition-colors duration-200  rounded-lg">
+              <Marquee
+                items={secondRowExamples}
+                onItemClick={handleExampleClick}
+                speed={50}
+                direction="right"
+                // className="bg-black hover:bg-[#111111] "
+              />
+            </div>
           </div>
         </div>
       </main>
