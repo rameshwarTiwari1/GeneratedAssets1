@@ -122,7 +122,7 @@ export default function HomePage() {
               <Link href="/auth">Login</Link>
             </Button>
              <a
-              href="https://twitter.com/yourusername"
+              href="https://x.com/snap_folio"
               target="_blank"
               rel="noopener noreferrer"
             >
