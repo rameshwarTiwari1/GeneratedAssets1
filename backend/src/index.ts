@@ -38,7 +38,8 @@ app.use(cors({
       'http://127.0.0.1:5174',
       'http://127.0.0.1:5173',
       'https://generated-assets1.vercel.app',
-      'https://snapfolio.live'
+      'https://snapfolio.live',
+      'https://www.snapfolio.live',
     ];
     
     if (allowedOrigins.includes(origin) || !origin) {
