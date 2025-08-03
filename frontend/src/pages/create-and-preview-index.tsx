@@ -141,18 +141,18 @@ console.log("load",load);
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-orange-500/20">
         <div className="max-w-7xl px-2 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
                         <a href="/" className="flex items-center">
-            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
+            <img src="/bonk-logo.svg" alt="Bonk Logo" className="w-12 h-12" />
+            <div className="bonk-text text-2xl font-bold ml-2">Bonkfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
             <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a>
             {!user ? (
-              <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-full px-6 py-2 ml-2 shadow-lg hover:shadow-xl transition-all duration-300" onClick={() => {
+              <Button className="bonk-gradient bonk-gradient-hover text-white font-bold rounded-full px-6 py-2 ml-2 shadow-lg hover:shadow-xl transition-all duration-300 bonk-glow-hover" onClick={() => {
                 if (indexData) {
                   localStorage.setItem('guestIndexDraft', JSON.stringify(indexData));
                 }
@@ -219,7 +219,7 @@ console.log("load",load);
         <div className="flex-1 h-screen flex flex-col bg-black p-4 md:p-8 overflow-y-auto transition-all duration-300 ease-in-out">
           {loading || indexData === null ? (
             <div className="flex-1 flex flex-col items-center justify-center">
-              <img src="/logo.png" alt="Snapfolio Logo" className="w-16 h-16 mb-2 animate-pulse" />
+                              <img src="/bonk-logo.svg" alt="Bonk Logo" className="w-16 h-16 mb-2 animate-pulse" />
               <div className="mt-1 text-gray-300 text-center text-sm font-semibold">Waiting for index to be created...</div>
             </div>
           ) : error ? (
@@ -229,7 +229,7 @@ console.log("load",load);
               {/* Header */}
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                 <div>
-                  <h1 className="text-3xl font-bold text-gradient mb-1 break-words">{indexData.name}</h1>
+                  <h1 className="text-3xl font-bold bonk-text mb-1 break-words">{indexData.name}</h1>
                   <div className="flex items-center gap-4 text-sm text-gray-400 flex-wrap">
                     <div className="flex items-center gap-1"><Calendar className="h-4 w-4" /><span>Created {formatDate(indexData.createdAt)}</span></div>
                     <div className="flex items-center gap-1"><BarChart3 className="h-4 w-4" /><span>{indexData.stocks?.length || 0} stocks</span></div>
@@ -295,7 +295,7 @@ console.log("load",load);
               {indexData.description && (
                 <Card className="glass-card hover-lift mb-4">
                   <CardHeader>
-                    <CardTitle className="text-gradient">Investment Thesis</CardTitle>
+                    <CardTitle className="bonk-text">Investment Thesis</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{indexData.description}</p>
@@ -309,7 +309,7 @@ console.log("load",load);
               {user ? (
                 <Card className="glass-card hover-lift mb-4">
                   <CardHeader>
-                    <CardTitle className="text-gradient">Backtest: Returns vs drawdown</CardTitle>
+                    <CardTitle className="bonk-text">Backtest: Returns vs drawdown</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <PerformanceChart indexId={indexData._id} />
@@ -331,7 +331,7 @@ console.log("load",load);
               {/* Stock Table */}
               <Card className="glass-card hover-lift mb-4">
                 <CardHeader>
-                  <CardTitle className="text-gradient">Constituent Stocks</CardTitle>
+                  <CardTitle className="bonk-text">Constituent Stocks</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <StockTable stocks={indexData.stocks} />

@@ -389,12 +389,12 @@ const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-orange-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
                         <a href="/" className="flex items-center">
-            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
+            <img src="/bonk-logo.svg" alt="Bonk Logo" className="w-12 h-12" />
+            <div className="bonk-text text-2xl font-bold ml-2">Bonkfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             <Link href="/dashboard" className="text-white hover:text-gray-300 transition-colors">Dashboard</Link>
@@ -413,7 +413,7 @@ const ProfilePage: React.FC = () => {
             <Card className="glass-card hover-lift">
               <CardHeader>
                 <div className="flex justify-between items-center">
-                  <CardTitle className="text-gradient flex items-center space-x-2">
+                  <CardTitle className="bonk-text flex items-center space-x-2">
                     <User className="h-5 w-5" />
                     <span>Profile Information</span>
                   </CardTitle>

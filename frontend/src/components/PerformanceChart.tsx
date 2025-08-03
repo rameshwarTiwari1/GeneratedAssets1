@@ -217,7 +217,7 @@ export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChart
     return (
       <Card className="glass-card hover-lift">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gradient">Backtest Performance</CardTitle>
+          <CardTitle className="text-xl font-semibold bonk-text">Backtest Performance</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4 mb-6 text-center">
@@ -270,7 +270,7 @@ export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChart
     <Card className="glass-card hover-lift">
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-xl font-semibold text-gradient">Backtest Performance</CardTitle>
+          <CardTitle className="text-xl font-semibold bonk-text">Backtest Performance</CardTitle>
           <div className="flex space-x-2">
             {timeRanges.map((range) => (
               <Button
@@ -280,8 +280,8 @@ export function PerformanceChart({ indexId, guestBacktesting }: PerformanceChart
                 onClick={() => setTimeRange(range.value)}
                 className={`px-3 py-1 text-sm transition-all duration-200 ${
                   timeRange === range.value 
-                    ? 'gradient-primary text-white shadow-lg' 
-                    : 'border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300' 
+                    : 'border-gray-200 dark:border-gray-700 hover:bonk-gradient hover:border-orange-500/50 hover:text-white hover:shadow-lg'
                 }`}
               >
                 {range.label}

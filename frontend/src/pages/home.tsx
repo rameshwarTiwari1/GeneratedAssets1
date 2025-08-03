@@ -46,7 +46,7 @@ const FloatingLetters = () => {
       {floatingItems.map((item) => (
         <div
           key={item.id}
-          className="absolute text-gray-800 font-mono select-none animate-float-random"
+          className="absolute text-orange-500 font-mono select-none animate-float-random"
           style={{
             left: `${item.x}%`,
             top: `${item.y}%`,
@@ -108,23 +108,23 @@ export default function HomePage() {
       <FloatingLetters />
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 backdrop-blur-md  bg-black/90 border-b border-gray-900">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-orange-500/20">
         <div className="max-w-7xl mx-auto px-2 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
-                        <a href="/" className="flex items-center">
-            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
-            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
+            <a href="/" className="flex items-center">
+              <img src="/bonk-logo.svg" alt="Bonk Logo" className="w-12 h-12" />
+              <div className="bonk-text text-2xl font-bold ml-2">Bonkfolio</div>
+            </a>
           </div>
           <nav className="flex items-center space-x-6">
-            {/* <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a> */}
-            <Button asChild className="bg-black hover:bg-gray-900 text-white border border-gray-700 rounded-lg px-4 py-2 ml-2">
+            <Button asChild className="bonk-gradient bonk-gradient-hover text-white border border-orange-500/30 rounded-lg px-4 py-2 ml-2 bonk-glow-hover transition-all duration-300">
               <Link href="/auth">Login</Link>
             </Button>
              <a
               href="https://x.com/snap_folio"
               target="_blank"
               rel="noopener noreferrer"
+              className="text-orange-500 hover:text-orange-400 transition-colors"
             >
               <FaXTwitter />
             </a>
@@ -137,7 +137,7 @@ export default function HomePage() {
         <div className="w-full max-w-4xl mx-auto">
           {!isLoading && (
             <>
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in-up">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in-up bonk-text">
                 Turn any idea into an investable index
               </h1>
               <p
@@ -160,7 +160,7 @@ export default function HomePage() {
                 <Input
                   type="text"
                   placeholder="What would you like to invest in?"
-                  className="w-full rounded-xl py-6 px-6 text-lg bg-black border border-gray-800 text-white placeholder-gray-500 focus:border-gray-500 focus:ring-1 focus:ring-gray-500"
+                  className="w-full rounded-xl py-6 px-6 text-lg bg-black border border-orange-500/30 text-white placeholder-gray-500 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 bonk-glow-hover transition-all duration-300"
                   value={prompt}
                   onChange={e => setLocalPrompt(e.target.value)}
                   disabled={isLoading}
@@ -168,7 +168,7 @@ export default function HomePage() {
                 <Button
                   type="submit"
                   size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black hover:bg-gray-900 text-white border border-gray-700"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bonk-gradient bonk-gradient-hover text-white border border-orange-500/30 bonk-glow-hover transition-all duration-300"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -188,21 +188,21 @@ export default function HomePage() {
             className="space-y-4 animate-fade-in-up"
             style={{ animationDelay: "0.6s" }}
           >
-            <div className="transition-colors duration-200  rounded-lg">
+            <div className="transition-colors duration-200 rounded-lg">
               <Marquee
                 items={firstRowExamples}
                 onItemClick={handleExampleClick}
                 speed={40}
-                // className="bg-black hover:bg-[#111111] "
+                className="bonk-border"
               />
             </div>
-            <div className="transition-colors duration-200  rounded-lg">
+            <div className="transition-colors duration-200 rounded-lg">
               <Marquee
                 items={secondRowExamples}
                 onItemClick={handleExampleClick}
                 speed={50}
                 direction="right"
-                // className="bg-black hover:bg-[#111111] "
+                className="bonk-border"
               />
             </div>
           </div>
@@ -210,50 +210,9 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      {/* <footer className="relative px-4 py-6 z-10">
-        <div className="text-center text-sm text-gray-500 mb-4">
-          <span>An AI product from </span>
-          <span className="font-semibold text-white">public</span>
-        </div>
-        <p className="text-xs text-gray-600 text-center max-w-4xl mx-auto leading-relaxed mb-4">
-          Snapfolio is an interactive analysis tool brought to you by
-          Public Holdings, Inc. ("Public"). Using Snapfolio, you can
-          search for stocks and ETFs with the assistance of AI, create a
-          portfolio, and compare key metrics for that portfolio against the
-          benchmark S&P 500. You cannot invest via this website. This
-          information is provided for educational purposes only. By using this
-          tool, you agree to the Snapfolio{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            User Agreement
-          </a>{" "}
-          and{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Acceptable Use Policy
-          </a>
-          .
-        </p>
-        <nav className="flex justify-center gap-6 flex-wrap">
-          <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
-            User Agreement
-          </a>
-          <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
-            Acceptable Use Policy
-          </a>
-          <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
-            Disclosures
-          </a>
-          <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
-            Privacy Policy
-          </a>
-          <a className="text-xs text-gray-500 hover:text-gray-400" href="#">
-            Terms of Service
-          </a>
-        </nav>
-      </footer> */}
-
       <footer className="relative px-4 py-6 z-10">
         <div className="text-center text-sm text-gray-500 mb-4">
-          <span>Snapfolio 2025  All Rights Reversed. </span>
+          <span>Bonkfolio 2025 - All Rights Reversed. </span>
         </div>
       
       </footer>
