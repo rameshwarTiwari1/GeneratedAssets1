@@ -16,6 +16,8 @@ router.get('/backtest/:indexId', authenticateToken, async (req, res) => {
     if (!index) {
       return res.status(404).json({ message: 'Index not found' });
     }
+    console.log("Index not found, this is not a error");
+    
 
     // This is mock data generation. In a real scenario, you'd fetch actual historical data.
     const backtestData = generateBacktestingData(index.stocks as any, index.name || "");

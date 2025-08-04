@@ -43,8 +43,8 @@ class AuthService {
 
   private checkFirebaseAvailability() {
     try {
-      console.log("Checking Firebase availability...");
-      console.log("Auth object:", auth);
+      console.log("Checking Firebase availability....");
+      console.log("Auth object::", auth);
       console.log("Auth type:", typeof auth);
 
       // Check if Firebase auth is properly initialized
