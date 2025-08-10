@@ -8,7 +8,7 @@ import {
   getBenchmarkData, 
   searchStockSymbol, 
   getStockDataFromPolygon, 
-  getStockDataFromFinnhub 
+  getStockDataFromFinnhub   
 } from "./services/stockData";
 import { generateBacktestingData } from "./services/backtesting";
 import { insertIndexSchema } from "./shared/schema";
