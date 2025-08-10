@@ -450,17 +450,16 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-orange-500/20">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
         <div className="max-w-7xl mx-auto px-2 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
-            <a href="/" className="flex items-center">
-              <img src="/bonk-logo.svg" alt="Bonk Logo" className="w-12 h-12" />
-              <div className="bonk-text text-2xl font-bold ml-2">Bonkfolio</div>
-            </a>
+                        <a href="/" className="flex items-center">
+            <img src="/logo.png" alt="Logo" className="w-12 h-12" />
+            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
-            <Link href="/dashboard" className="text-white font-medium border-b-2 border-orange-500 pb-4 transition-colors">Dashboard</Link>
-            <Link href="/indexes" className="text-white hover:text-orange-400 pb-4 transition-colors">My Indexes</Link>
+            <Link href="/dashboard" className="text-white font-medium border-b-2 border-blue-600 pb-4 transition-colors">Dashboard</Link>
+            <Link href="/indexes" className="text-white hover:text-gray-300 pb-4 transition-colors">My Indexes</Link>
             <Button variant="ghost" size="sm" className="hover:bg-gray-800">
               <Bell className="h-4 w-4" />
             </Button>
@@ -521,13 +520,13 @@ export default function Dashboard() {
             <Card className="glass-card hover-lift">
               <CardHeader>
                 <div className="flex justify-between items-center">
-                  <CardTitle className="text-xl font-semibold bonk-text">
+                  <CardTitle className="text-xl font-semibold text-gradient">
                     Recent Indexes
                   </CardTitle>
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="bonk-text hover:opacity-80 transition-opacity"
+                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
                   >
                     View All
                   </Button>
@@ -581,7 +580,7 @@ export default function Dashboard() {
             {/* Portfolio Summary */}
             <Card className="glass-card hover-lift">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold bonk-text">
+                <CardTitle className="text-lg font-semibold text-gradient">
                   Portfolio Summary
                 </CardTitle>
               </CardHeader>
@@ -638,7 +637,7 @@ export default function Dashboard() {
             <Card className="glass-card hover-lift">
               <CardHeader>
                 <div className="flex justify-between items-center">
-                  <CardTitle className="text-lg font-semibold bonk-text">
+                  <CardTitle className="text-lg font-semibold text-gradient">
                     Market Overview
                   </CardTitle>
                   <div className="relative" ref={searchContainerRef}>
@@ -826,7 +825,7 @@ export default function Dashboard() {
         <Card className="glass-card hover-lift mb-8">
           <CardHeader>
             <div className="flex justify-between items-center">
-                                <CardTitle className="text-xl font-semibold bonk-text">
+              <CardTitle className="text-xl font-semibold text-gradient">
                 Trending Indexes
               </CardTitle>
               <div className="flex space-x-2">
@@ -938,7 +937,7 @@ export default function Dashboard() {
               <div className="flex items-center space-x-2 mb-4">
                 
                 <span className="font-bold text-gray-900 dark:text-gray-100">
-                  Bonkfolio
+                  Snapfolio
                 </span>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -981,7 +980,7 @@ export default function Dashboard() {
           </div>
           <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 flex justify-between items-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-                              © 2024 Bonkfolio. All rights reserved.
+              © 2024 Snapfolio. All rights reserved.
             </p>
             <div className="flex space-x-4">
               {["twitter", "linkedin", "github"].map((social) => (

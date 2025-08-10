@@ -122,7 +122,7 @@ const AuthPage: React.FC = () => {
             <img src="/logo.png" alt="Logo" className="w-6 h-6" />
 
             {/* Text */}
-            <div className="bonk-text text-2xl font-bold">Bonkfolio</div>
+            <div className="text-white text-2xl font-bold">Snapfolio</div>
           </div>
           </div>
           <h2 className="text-2xl font-semibold text-white mb-2">Welcome to the Future of Investing</h2>
@@ -133,7 +133,7 @@ const AuthPage: React.FC = () => {
         <div className="md:w-1/2 bg-black p-8 md:p-12 border-l border-gray-800">
           <Card className="bg-transparent border-none shadow-none">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold bonk-text mb-2">
+              <CardTitle className="text-3xl font-bold text-gradient mb-2">
                 {mode === "login" ? "Welcome Back" : "Create Account"}
               </CardTitle>
               <CardDescription>

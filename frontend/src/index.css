@@ -24,14 +24,6 @@
   --ring: #333;
   --radius: 0.625rem;
 
-  /* Bonk Theme Colors */
-  --bonk-orange: #FF6B35;
-  --bonk-orange-light: #FF8C42;
-  --bonk-orange-dark: #FF4500;
-  --bonk-yellow: #FFA500;
-  --bonk-gradient: linear-gradient(135deg, #FF6B35 0%, #FF8C42 50%, #FFA500 100%);
-  --bonk-gradient-hover: linear-gradient(135deg, #FF8C42 0%, #FFA500 50%, #FF6B35 100%);
-
   --success: hsl(142, 76%, 36%);
   --success-foreground: hsl(355, 7%, 97%);
   --warning: hsl(38, 92%, 50%);
@@ -84,35 +76,6 @@
 body, html {
   background: #000 !important;
   color: #fff !important;
-}
-
-/* Bonk Theme Classes */
-.bonk-gradient {
-  background: var(--bonk-gradient);
-}
-
-.bonk-gradient-hover:hover {
-  background: var(--bonk-gradient-hover);
-}
-
-.bonk-text {
-  background: var(--bonk-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* .bonk-border {
-  border: 2px solid transparent;
-  background: linear-gradient(#000, #000) padding-box, var(--bonk-gradient) border-box;
-} */
-
-.bonk-glow {
-  box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-}
-
-.bonk-glow-hover:hover {
-  box-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
 }
 
 /* Override glass-card and metric-card for black theme */
@@ -254,15 +217,6 @@ button,a{
     }
   }
 
-  @keyframes bonk-glow {
-    0%, 100% {
-      box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-    }
-    50% {
-      box-shadow: 0 0 30px rgba(255, 107, 53, 0.8);
-    }
-  }
-
   @keyframes pulse-success {
     0%, 100% {
       background-color: #22c55e; /* bg-green-500 */
@@ -344,10 +298,6 @@ button,a{
 
   .animate-glow {
     animation: glow 2s ease-in-out infinite alternate;
-  }
-
-  .animate-bonk-glow {
-    animation: bonk-glow 2s ease-in-out infinite alternate;
   }
 
   .animate-pulse-success {
