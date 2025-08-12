@@ -142,7 +142,7 @@ console.log("load",load);
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Navbar */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-black/90 border-b border-gray-900">
-        <div className="max-w-7xl px-2 flex items-center h-16">
+        <div className="px-2 flex items-center h-16">
           <div className="flex items-center space-x-2 p-2 flex-grow">
                         <a href="/" className="flex items-center">
             <img src="/logo.png" alt="Logo" className="w-12 h-12" />
