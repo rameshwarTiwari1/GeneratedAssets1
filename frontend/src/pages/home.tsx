@@ -102,6 +102,16 @@ export default function HomePage() {
     setLocation("/create-index", { state: { prompt: promptToGenerate } });
   };
 
+  const caValue = "Will Update Soon";
+  const [showToast, setShowToast] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(caValue).then(() => {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2000); // Hide after 2s
+    });
+  };
+
   return (
     <div className="relative flex flex-col min-h-screen bg-black text-white overflow-hidden">
       {/* Floating Letters Background */}
@@ -252,11 +262,62 @@ export default function HomePage() {
       </footer> */}
 
       <footer className="relative px-4 py-6 z-10">
-        <div className="text-center text-sm text-gray-500 mb-4">
-          <span>Snapfolio 2025  All Rights Reversed. </span>
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={handleCopy}
+          className="group relative inline-block p-px font-semibold leading-6 text-white bg-gray-200 shadow-2xl cursor-pointer rounded-xl shadow-zinc-900 transition-transform duration-300 ease-in-out hover:scale-105 active:scale-95"
+        >
+          <span
+            className="absolute inset-0 rounded-xl bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          ></span>
+          <span
+            className="relative z-10 block px-6 py-3 rounded-xl"
+            style={{ backgroundColor: "#111111", border: "1px solid grey" }}
+          >
+            <div className="relative z-10 flex items-center space-x-2">
+              <span className="transition-all duration-500 group-hover:translate-x-1">
+                Get CA : {caValue}
+              </span>
+            </div>
+          </span>
+        </button>
+      </div>
+
+      <div className="text-center text-sm text-gray-500">
+        <span>Snapfolio 2025 All Rights Reserved.</span>
+      </div>
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-fade-in-out">
+          CA copied to clipboard!
         </div>
-      
-      </footer>
+      )}
+
+      <style>{`
+        @keyframes fadeInOut {
+          0% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          10% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          90% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          100% {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+        }
+        .animate-fade-in-out {
+          animation: fadeInOut 2s ease-in-out forwards;
+        }
+      `}</style>
+    </footer>
 
       <style>{`
         @keyframes fade-in-up {
