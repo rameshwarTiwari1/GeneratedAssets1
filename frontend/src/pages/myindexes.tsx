@@ -65,7 +65,7 @@ export default function MyIndexesPage() {
     queryKey: ["indexes"],
     queryFn: async (): Promise<IndexData[]> => {
       const response = await authService.apiRequest(
-        "https://generatedassets1-8z68.onrender.com/api/indexes"
+        "https://generatedassets1.onrender.com/api/indexes"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch indexes");

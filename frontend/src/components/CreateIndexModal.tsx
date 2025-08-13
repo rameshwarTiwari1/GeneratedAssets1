@@ -45,7 +45,7 @@ export function CreateIndexModal({ isOpen, setIsLoadings, onClose, initialPrompt
     mutationFn: async (data: { prompt: string }) => {
       setIsLoading(true);
       const response = await authService.apiRequest(
-        "https://generatedassets1-8z68.onrender.com/api/generate-index",
+        "https://generatedassets1.onrender.com/api/generate-index",
         {
           method: "POST",
           headers: {
