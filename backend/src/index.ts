@@ -33,6 +33,7 @@ const allowedOrigins = [
   'https://generated-assets1.vercel.app',
   'https://generated-assets1-pink.vercel.app',
   'https://generatedassets1.onrender.com',
+  'https://generatedassets1-8z68.onrender.com',
   'https://snapfolio.live',
   'https://www.snapfolio.live',
 ];

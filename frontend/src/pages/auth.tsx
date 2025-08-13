@@ -78,7 +78,7 @@ const AuthPage: React.FC = () => {
     setGuestSaveLoading(true);
     setGuestSaveError("");
     try {
-      const response = await fetch("https://generatedassets1.onrender.com/api/generate-index", {
+      const response = await fetch("https://generatedassets1-8z68.onrender.com/api/generate-index", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
