@@ -148,7 +148,7 @@ export default function HomePage() {
           {!isLoading && (
             <>
               <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in-up">
-                Turn any idea into an investable 
+                Turn any idea into an investable index
               </h1>
               <p
                 className="text-xl text-gray-400 mb-12 animate-fade-in-up"
@@ -358,6 +358,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 
