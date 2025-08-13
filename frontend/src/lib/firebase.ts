@@ -3,12 +3,13 @@ import { getAuth, GoogleAuthProvider, Auth } from "firebase/auth";
 
 // Firebase configuration with actual credentials
 const firebaseConfig = {
-  apiKey: "AIzaSyAPk5ochf21i6PkfyeiJa4TlsJX6WzOTzc",
-  authDomain: "stockserchai.firebaseapp.com",
-  projectId: "stockserchai",
-  storageBucket: "stockserchai.appspot.com",
-  messagingSenderId: "508294468685",
-  appId: "1:508294468685:web:4f9fe22c29e2f59141b804",
+  apiKey: "AIzaSyBHZR3etA6uUi4dWwKCykhoUJofWUAAVck",
+  authDomain: "snapfolio-b3d42.firebaseapp.com",
+  projectId: "snapfolio-b3d42",
+  storageBucket: "snapfolio-b3d42.firebasestorage.app",
+  messagingSenderId: "443522586422",
+  appId: "1:443522586422:web:66b629a0185fba8fda8597",
+  measurementId: "G-JVKLNJKZV2",
 };
 
 // Initialize Firebase

@@ -23,7 +23,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://generatedassets1.onrender.com",
+        target: "https://generatedassets1-8z68.onrender.com",
         changeOrigin: true,
         secure: false,
       },
