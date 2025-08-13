@@ -86,7 +86,7 @@ export function IndexCard({ index, variant = 'recent', onClick, currentUserId, o
     setLoading(true);
     try {
       const response = await authService.apiRequest(
-        `https://generatedassets1.onrender.com/api/index/${index._id}/toggle-public`,
+        `https://generatedassets1-8z68.onrender.com/api/index/${index._id}/toggle-public`,
         {
           method: "PATCH",
         }

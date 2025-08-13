@@ -78,7 +78,7 @@ const CreateAndPreviewIndex: React.FC = () => {
     if (createdIndexId && user && isValidObjectId(createdIndexId)) {
       setLoading(true);
       setError(null);
-      authService.apiRequest(`https://generatedassets1.onrender.com/api/index/${createdIndexId}`)
+      authService.apiRequest(`https://generatedassets1-8z68.onrender.com/api/index/${createdIndexId}`)
         .then(async (response: any) => {
           if (!response.ok) throw new Error("Failed to fetch index");
           const data = await response.json();
