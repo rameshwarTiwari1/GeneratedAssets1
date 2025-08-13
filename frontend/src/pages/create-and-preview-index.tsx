@@ -149,8 +149,8 @@ console.log("load",load);
             <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
-            <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a>
+            {/* <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
+            <a href="#" className="text-white hover:text-gray-300 transition-colors">Top list</a> */}
             {!user ? (
               <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold rounded-full px-6 py-2 ml-2 shadow-lg hover:shadow-xl transition-all duration-300" onClick={() => {
                 if (indexData) {
