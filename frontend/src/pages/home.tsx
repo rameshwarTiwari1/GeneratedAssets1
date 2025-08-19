@@ -123,7 +123,7 @@ export default function HomePage() {
           <div className="flex items-center space-x-2 p-2 flex-grow">
                         <a href="/" className="flex items-center">
             <img src="/logo.png" alt="Logo" className="w-12 h-12" />
-            <div className="text-white text-2xl font-bold">Snap</div></a>
+            <div className="text-white text-2xl font-bold">Snapfolio</div></a>
           </div>
           <nav className="flex items-center space-x-6">
             {/* <a href="#" className="text-white hover:text-gray-300 transition-colors">About</a>
@@ -358,6 +358,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 
