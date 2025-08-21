@@ -102,7 +102,7 @@ export default function HomePage() {
     setLocation("/create-index", { state: { prompt: promptToGenerate } });
   };
 
-  const caValue = "HeUKqR6UD8VgpA2ULuCkw6WoyirWSGLp7bAF2KnQpump";
+  const caValue = "Will update soon";
   const [showToast, setShowToast] = useState(false);
 
   const handleCopy = () => {
@@ -358,6 +358,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 
